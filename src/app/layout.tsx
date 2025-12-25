@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Layout/Navbar';
 import Footer from '@/components/Layout/Footer';
+import { config } from '@/lib/config';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -11,19 +12,21 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Kumoart - Kerajinan Rajut Handmade',
-    template: '%s | Kumoart Handmade',
+    default: `${config.brand.name} - Kerajinan Rajut Handmade`,
+    template: `%s | ${config.brand.fullName}`,
   },
   description:
-    'Kumoart menyediakan kerajinan rajut handmade berkualitas tinggi. Tas, boneka amigurumi, aksesoris, dan home decor dibuat dengan cinta.',
+    `${config.brand.name} menyediakan kerajinan rajut handmade berkualitas tinggi. Tas, boneka amigurumi, aksesoris, dan home decor dibuat dengan cinta.`,
   keywords: ['rajut', 'crochet', 'handmade', 'amigurumi', 'tas rajut', 'kerajinan tangan', 'umkm'],
-  authors: [{ name: 'Kumoart Handmade' }],
+  authors: [{ name: config.brand.fullName }],
+  metadataBase: new URL(config.site.url),
   openGraph: {
-    title: 'Kumoart - Kerajinan Rajut Handmade',
+    title: `${config.brand.name} - Kerajinan Rajut Handmade`,
     description:
       'Kerajinan rajut handmade berkualitas tinggi. Setiap jahitan adalah cerita, setiap produk adalah karya seni.',
     type: 'website',
     locale: 'id_ID',
+    siteName: config.brand.fullName,
   },
 };
 

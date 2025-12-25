@@ -1,3 +1,5 @@
+import { config } from '@/lib/config';
+
 interface WhatsAppButtonProps {
   productName?: string;
   productPrice?: string;
@@ -7,9 +9,6 @@ interface WhatsAppButtonProps {
   variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
 }
-
-// Ganti dengan nomor WhatsApp UMKM Anda
-const WHATSAPP_NUMBER = '6281234567890';
 
 export default function WhatsAppButton({
   productName,
@@ -27,7 +26,7 @@ export default function WhatsAppButton({
     }
 
     if (productName && productPrice) {
-      return `Halo Kumoart! 👋
+      return `Halo ${config.brand.name}! 👋
 
 Saya tertarik untuk memesan:
 
@@ -38,7 +37,7 @@ Mohon informasinya lebih lanjut. Terima kasih! 🙏`;
     }
 
     if (eventTitle) {
-      return `Halo Kumoart! 👋
+      return `Halo ${config.brand.name}! 👋
 
 Saya tertarik dengan event:
 
@@ -47,10 +46,10 @@ Saya tertarik dengan event:
 Mohon informasinya lebih lanjut. Terima kasih! 🙏`;
     }
 
-    return 'Halo Kumoart! Saya ingin bertanya tentang produk rajut handmade Anda. 🧶';
+    return `Halo ${config.brand.name}! Saya ingin bertanya tentang produk rajut handmade Anda. 🧶`;
   };
 
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/${config.whatsapp.number}?text=${encodeURIComponent(
     generateMessage()
   )}`;
 

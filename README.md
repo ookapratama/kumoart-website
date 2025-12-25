@@ -1,6 +1,6 @@
-# Kumoart - Website UMKM
+# Kumoart - Website UMKM Kerajinan Rajut
 
-Website promosi UMKM untuk katalog produk dan event menggunakan Next.js dengan pendekatan Static Site Generation (SSG).
+Website promosi UMKM kerajinan tangan rajut menggunakan Next.js dengan pendekatan Static Site Generation (SSG).
 
 ## 🚀 Teknologi
 
@@ -40,23 +40,50 @@ src/
 │   ├── products.json             # Data produk
 │   └── events.json               # Data event
 └── lib/
+    ├── config.ts                 # Konfigurasi dari environment variables
     ├── products.ts               # Fungsi akses data produk
     └── events.ts                 # Fungsi akses data event
 ```
 
-## 🔄 Data Flow
+## 🔐 Environment Variables
 
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   JSON Files    │────▶│   Lib Functions │────▶│   Components    │
-│  (data/*.json)  │     │  (lib/*.ts)     │     │  (components/*) │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                                                        │
-                                                        ▼
-                                                ┌─────────────────┐
-                                                │   App Pages     │
-                                                │   (app/*.tsx)   │
-                                                └─────────────────┘
+### Setup
+
+1. Copy file `.env.example` ke `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Edit `.env.local` dengan nilai sebenarnya
+
+3. **JANGAN** commit `.env.local` ke repository (sudah ada di .gitignore)
+
+### Variabel yang Tersedia
+
+| Variable | Deskripsi | Contoh |
+|----------|-----------|--------|
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Nomor WhatsApp untuk pemesanan | `6281234567890` |
+| `NEXT_PUBLIC_BRAND_NAME` | Nama brand/usaha | `Kumoart` |
+| `NEXT_PUBLIC_BRAND_TAGLINE` | Tagline brand | `Handmade` |
+| `NEXT_PUBLIC_ADDRESS` | Alamat lengkap | `Jl. Kreatif No. 45` |
+| `NEXT_PUBLIC_EMAIL` | Email bisnis | `hello@kumoart.id` |
+| `NEXT_PUBLIC_INSTAGRAM_URL` | URL Instagram | `https://instagram.com/kumoart` |
+| `NEXT_PUBLIC_TIKTOK_URL` | URL TikTok | `https://tiktok.com/@kumoart` |
+| `NEXT_PUBLIC_SITE_URL` | Base URL website | `https://kumoart.id` |
+| `NEXT_PUBLIC_GA_ID` | Google Analytics ID | `G-XXXXXXXXXX` |
+| `NEXT_PUBLIC_META_PIXEL_ID` | Meta Pixel ID | `123456789` |
+
+### Menggunakan Config
+
+Akses environment variables melalui `lib/config.ts`:
+
+```typescript
+import { config } from '@/lib/config';
+
+// Contoh penggunaan
+console.log(config.whatsapp.number);     // Nomor WhatsApp
+console.log(config.brand.name);          // Nama brand
+console.log(config.social.instagram);    // URL Instagram
 ```
 
 ## 📋 Fitur
@@ -92,6 +119,21 @@ src/
 
 ## 🛠️ Library Functions
 
+### `lib/config.ts`
+```typescript
+config.whatsapp.number      // Nomor WhatsApp
+config.brand.name           // Nama brand
+config.brand.tagline        // Tagline
+config.brand.fullName       // Nama lengkap
+config.contact.address      // Alamat
+config.contact.email        // Email
+config.social.instagram     // URL Instagram
+config.social.tiktok        // URL TikTok
+config.analytics.gaId       // Google Analytics ID
+config.site.url             // Base URL
+config.site.isDevelopment   // Cek mode development
+```
+
 ### `lib/products.ts`
 ```typescript
 getAllProducts()        // Semua produk
@@ -122,6 +164,10 @@ formatEventPrice()      // Format harga event
 ```bash
 # Install dependencies
 npm install
+
+# Setup environment variables
+cp .env.example .env.local
+# Edit .env.local dengan nilai sebenarnya
 
 # Run development server
 npm run dev
@@ -156,12 +202,6 @@ Project dikonfigurasi untuk static export. Hasil build tersedia di folder `out/`
 }
 ```
 
-### WhatsApp Number
-Ubah nomor WhatsApp di `components/CTA/WhatsAppButton.tsx`:
-```typescript
-const WHATSAPP_NUMBER = '6281234567890'; // Ganti dengan nomor Anda
-```
-
 ## 📝 Data Format
 
 ### Product (`data/products.json`)
@@ -190,10 +230,10 @@ const WHATSAPP_NUMBER = '6281234567890'; // Ganti dengan nomor Anda
   "endDate": "2025-01-31",
   "image": "/images/events/gambar.jpg",
   "isActive": true,
-  "discount": 25,           // opsional
-  "price": 100000,          // opsional
-  "location": "Lokasi",     // opsional
-  "quota": 20,              // opsional
+  "discount": 25,
+  "price": 100000,
+  "location": "Lokasi",
+  "quota": 20,
   "terms": ["S&K 1", "S&K 2"]
 }
 ```
@@ -209,14 +249,19 @@ Format yang direkomendasikan: JPG atau WebP dengan rasio 4:3.
 ## 🎨 Customization
 
 ### Warna Brand
-Edit Tailwind config atau ganti class `amber-*` di komponen dengan warna brand Anda.
+Tema menggunakan warna `rose-*` (merah) dan `gray-900` (hitam). Edit class Tailwind di komponen jika ingin mengubah.
 
-### Logo
-Ganti teks "Kumoart" di `Navbar.tsx` dan `Footer.tsx` dengan logo atau nama UMKM Anda.
+### Logo & Brand
+Semua informasi brand diambil dari environment variables. Edit `.env.local` untuk mengubah:
+- Nama brand
+- Tagline
+- Nomor WhatsApp
+- Social media links
 
 ### Metadata SEO
-Edit metadata di `app/layout.tsx` sesuai informasi UMKM Anda.
+Metadata SEO otomatis menggunakan nilai dari `lib/config.ts` yang mengambil dari environment variables.
 
 ---
 
-Dibuat dengan ❤️ menggunakan Next.js
+Dibuat dengan 🧶 dan ❤️ menggunakan Next.js
+

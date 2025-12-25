@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { config } from '@/lib/config';
 
 const navigation = [
   { name: 'Beranda', href: '/' },
@@ -19,8 +20,8 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-gray-900">Kumoart</span>
-              <span className="text-xs text-rose-600 font-medium">Handmade</span>
+              <span className="text-2xl font-bold text-gray-900">{config.brand.name}</span>
+              <span className="text-xs text-rose-600 font-medium">{config.brand.tagline}</span>
             </Link>
           </div>
 
