@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "slug": "promo-lebaran-2025",
+    "title": "Promo Spesial Lebaran 2025",
+    "description": "Dapatkan diskon hingga 25% untuk semua produk kue kering dalam rangka menyambut Hari Raya Idul Fitri 2025. Promo berlaku untuk pembelian minimal 3 toples.",
+    "startDate": "2025-03-01",
+    "endDate": "2025-03-31",
+    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/promo-lebaran.jpg",
+    "isActive": true,
+    "discount": 25,
+    "terms": [
+      "Berlaku untuk pembelian minimal 3 toples",
+      "Tidak dapat digabung dengan promo lain",
+      "Pengiriman gratis untuk area Jabodetabek"
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "workshop-kue-kering",
+    "title": "Workshop Membuat Kue Kering",
+    "description": "Ikuti workshop membuat kue kering bersama chef berpengalaman. Peserta akan belajar membuat nastar, kastengel, dan putri salju dari awal hingga siap saji.",
+    "startDate": "2025-02-15",
+    "endDate": "2025-02-15",
+    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/workshop.jpg",
+    "isActive": true,
+    "location": "Dapur Kumoart, Jl. Contoh No. 123",
+    "price": 350000,
+    "quota": 20,
+    "terms": [
+      "Termasuk bahan dan peralatan",
+      "Hasil workshop bisa dibawa pulang",
+      "Sertifikat partisipasi"
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "paket-hampers-valentine",
+    "title": "Paket Hampers Valentine",
+    "description": "Spesial Valentine! Paket hampers eksklusif berisi brownies, cookies, dan cokelat premium dalam kemasan mewah. Cocok untuk hadiah orang tersayang.",
+    "startDate": "2025-02-01",
+    "endDate": "2025-02-14",
+    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/valentine.jpg",
+    "isActive": true,
+    "price": 275000,
+    "terms": [
+      "Pre-order maksimal H-3",
+      "Free greeting card",
+      "Packaging premium"
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "bazar-natal-2024",
+    "title": "Bazar Natal 2024",
+    "description": "Kunjungi booth kami di Bazar Natal Mall Central. Tersedia berbagai produk spesial Natal dengan harga terbaik!",
+    "startDate": "2024-12-20",
+    "endDate": "2024-12-25",
+    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/bazar-natal.jpg",
+    "isActive": false,
+    "location": "Mall Central Lantai G",
+    "terms": [
+      "Booth nomor 25",
+      "Buka jam 10.00 - 21.00"
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "flash-sale-anniversary",
+    "title": "Flash Sale Anniversary Kumoart",
+    "description": "Rayakan ulang tahun Kumoart yang ke-5 dengan flash sale besar-besaran! Diskon up to 50% untuk produk-produk pilihan.",
+    "startDate": "2025-06-01",
+    "endDate": "2025-06-07",
+    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/anniversary.jpg",
+    "isActive": false,
+    "discount": 50,
+    "terms": [
+      "Selama persediaan masih ada",
+      "Maksimal 2 item per customer",
+      "Tidak termasuk produk pre-order"
+    ]
+  }
+]

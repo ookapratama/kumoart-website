@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "slug": "kue-lapis-legit",
+    "name": "Kue Lapis Legit Premium",
+    "description": "Kue lapis legit original dengan resep turun temurun. Dibuat dengan bahan-bahan berkualitas tinggi dan proses pembuatan yang cermat untuk menghasilkan rasa yang sempurna.",
+    "price": 250000,
+    "category": "Kue Basah",
+    "image": "/images/products/placeholder.svg", "_originalImage": "/images/products/lapis-legit.jpg",
+    "isFeatured": true,
+    "stock": 15
+  },
+  {
+    "id": 2,
+    "slug": "brownies-panggang",
+    "name": "Brownies Panggang Cokelat",
+    "description": "Brownies panggang dengan topping cokelat lumer yang menggugah selera. Tekstur lembut di dalam, renyah di luar.",
+    "price": 75000,
+    "category": "Kue Kering",
+    "image": "/images/products/placeholder.svg", "_originalImage": "/images/products/brownies.jpg",
+    "isFeatured": true,
+    "stock": 30
+  },
+  {
+    "id": 3,
+    "slug": "nastar-premium",
+    "name": "Nastar Premium Nanas Asli",
+    "description": "Nastar dengan selai nanas asli homemade. Isian melimpah dengan kulit yang lembut melt in your mouth.",
+    "price": 95000,
+    "category": "Kue Kering",
+    "image": "/images/products/placeholder.svg", "_originalImage": "/images/products/nastar.jpg",
+    "isFeatured": true,
+    "stock": 25
+  },
+  {
+    "id": 4,
+    "slug": "bolu-gulung-keju",
+    "name": "Bolu Gulung Keju",
+    "description": "Bolu gulung lembut dengan isian keju cream cheese yang creamy. Cocok untuk berbagai acara.",
+    "price": 65000,
+    "category": "Kue Basah",
+    "image": "/images/products/placeholder.svg", "_originalImage": "/images/products/bolu-gulung.jpg",
+    "isFeatured": true,
+    "stock": 20
+  },
+  {
+    "id": 5,
+    "slug": "kastengel-premium",
+    "name": "Kastengel Premium",
+    "description": "Kastengel dengan keju Edam premium. Gurih, renyah, dan meleleh di mulut.",
+    "price": 110000,
+    "category": "Kue Kering",
+    "image": "/images/products/placeholder.svg", "_originalImage": "/images/products/kastengel.jpg",
+    "isFeatured": true,
+    "stock": 18
+  },
+  {
+    "id": 6,
+    "slug": "kue-putri-salju",
+    "name": "Kue Putri Salju",
+    "description": "Kue putri salju yang lembut dengan taburan gula halus. Favorit di setiap momen spesial.",
+    "price": 85000,
+    "category": "Kue Kering",
+    "image": "/images/products/placeholder.svg", "_originalImage": "/images/products/putri-salju.jpg",
+    "isFeatured": true,
+    "stock": 22
+  },
+  {
+    "id": 7,
+    "slug": "donat-kentang",
+    "name": "Donat Kentang Empuk",
+    "description": "Donat kentang super empuk dengan berbagai topping pilihan. Tersedia dalam berbagai rasa.",
+    "price": 45000,
+    "category": "Roti",
+    "image": "/images/products/placeholder.svg", "_originalImage": "/images/products/donat.jpg",
+    "isFeatured": false,
+    "stock": 40
+  },
+  {
+    "id": 8,
+    "slug": "roti-sobek-cokelat",
+    "name": "Roti Sobek Cokelat",
+    "description": "Roti sobek lembut dengan isian cokelat yang melimpah. Cocok untuk sarapan atau cemilan.",
+    "price": 35000,
+    "category": "Roti",
+    "image": "/images/products/placeholder.svg", "_originalImage": "/images/products/roti-sobek.jpg",
+    "isFeatured": false,
+    "stock": 35
+  },
+  {
+    "id": 9,
+    "slug": "kue-cubit-rainbow",
+    "name": "Kue Cubit Rainbow",
+    "description": "Kue cubit warna-warni dengan topping meses dan keju. Favorit anak-anak dan dewasa.",
+    "price": 25000,
+    "category": "Kue Basah",
+    "image": "/images/products/placeholder.svg", "_originalImage": "/images/products/kue-cubit.jpg",
+    "isFeatured": false,
+    "stock": 50
+  },
+  {
+    "id": 10,
+    "slug": "tart-birthday-custom",
+    "name": "Tart Birthday Custom",
+    "description": "Tart ulang tahun custom dengan desain sesuai keinginan. Base vanilla atau cokelat tersedia.",
+    "price": 350000,
+    "category": "Cake",
+    "image": "/images/products/tart-birthday.jpg",
+    "isFeatured": false,
+    "stock": 5
+  }
+]
