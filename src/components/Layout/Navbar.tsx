@@ -19,7 +19,8 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-amber-600">Kumoart</span>
+              <span className="text-2xl font-bold text-gray-900">Kumoart</span>
+              <span className="text-xs text-rose-600 font-medium">Handmade</span>
             </Link>
           </div>
 
@@ -29,7 +30,7 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-gray-700 hover:text-amber-600 transition-colors duration-200 font-medium"
+                className="text-gray-700 hover:text-rose-600 transition-colors duration-200 font-medium"
               >
                 {item.name}
               </Link>
@@ -40,7 +41,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-700 hover:text-amber-600 focus:outline-none"
+              className="text-gray-700 hover:text-rose-600 focus:outline-none"
               aria-label="Toggle menu"
             >
               <svg
@@ -70,7 +71,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-gray-700 hover:text-amber-600 hover:bg-amber-50 px-3 py-2 rounded-md transition-colors duration-200"
+                  className="text-gray-700 hover:text-rose-600 hover:bg-rose-50 px-3 py-2 rounded-md transition-colors duration-200"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.name}

@@ -31,10 +31,10 @@ export default function WhatsAppButton({
 
 Saya tertarik untuk memesan:
 
-🎂 *${productName}*
+🧶 *${productName}*
 💰 Harga: ${productPrice}
 
-Mohon informasinya lebih lanjut. Terima kasih!`;
+Mohon informasinya lebih lanjut. Terima kasih! 🙏`;
     }
 
     if (eventTitle) {
@@ -44,10 +44,10 @@ Saya tertarik dengan event:
 
 📅 *${eventTitle}*
 
-Mohon informasinya lebih lanjut. Terima kasih!`;
+Mohon informasinya lebih lanjut. Terima kasih! 🙏`;
     }
 
-    return 'Halo Kumoart! Saya ingin bertanya tentang produk/layanan Anda.';
+    return 'Halo Kumoart! Saya ingin bertanya tentang produk rajut handmade Anda. 🧶';
   };
 
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
@@ -59,9 +59,9 @@ Mohon informasinya lebih lanjut. Terima kasih!`;
 
   const variantStyles = {
     primary:
-      'bg-green-500 hover:bg-green-600 text-white shadow-lg hover:shadow-xl',
+      'bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-xl',
     secondary:
-      'bg-white hover:bg-gray-50 text-green-600 border-2 border-green-500',
+      'bg-white hover:bg-gray-50 text-emerald-600 border-2 border-emerald-500',
   };
 
   const sizeStyles = {

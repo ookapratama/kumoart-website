@@ -1,83 +1,90 @@
 [
   {
     "id": 1,
-    "slug": "promo-lebaran-2025",
-    "title": "Promo Spesial Lebaran 2025",
-    "description": "Dapatkan diskon hingga 25% untuk semua produk kue kering dalam rangka menyambut Hari Raya Idul Fitri 2025. Promo berlaku untuk pembelian minimal 3 toples.",
-    "startDate": "2025-03-01",
-    "endDate": "2025-03-31",
-    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/promo-lebaran.jpg",
+    "slug": "workshop-amigurumi-pemula",
+    "title": "Workshop Amigurumi untuk Pemula",
+    "description": "Belajar membuat boneka rajut amigurumi dari nol! Cocok untuk pemula yang ingin mengenal dunia merajut. Semua bahan dan alat disediakan.",
+    "startDate": "2025-02-08",
+    "endDate": "2025-02-08",
+    "image": "/images/events/placeholder.svg",
     "isActive": true,
-    "discount": 25,
+    "location": "Studio Kumoart, Jl. Kreatif No. 45",
+    "price": 250000,
+    "quota": 15,
     "terms": [
-      "Berlaku untuk pembelian minimal 3 toples",
-      "Tidak dapat digabung dengan promo lain",
-      "Pengiriman gratis untuk area Jabodetabek"
+      "Termasuk starter kit lengkap",
+      "Hasil karya bisa dibawa pulang",
+      "E-sertifikat partisipasi",
+      "Snack dan minuman tersedia"
     ]
   },
   {
     "id": 2,
-    "slug": "workshop-kue-kering",
-    "title": "Workshop Membuat Kue Kering",
-    "description": "Ikuti workshop membuat kue kering bersama chef berpengalaman. Peserta akan belajar membuat nastar, kastengel, dan putri salju dari awal hingga siap saji.",
-    "startDate": "2025-02-15",
-    "endDate": "2025-02-15",
-    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/workshop.jpg",
+    "slug": "promo-valentine-handmade",
+    "title": "Promo Valentine - Handmade with Love",
+    "description": "Spesial Valentine! Diskon 20% untuk semua produk boneka amigurumi dan aksesoris rajut. Hadiah handmade lebih bermakna!",
+    "startDate": "2025-02-01",
+    "endDate": "2025-02-14",
+    "image": "/images/events/placeholder.svg",
     "isActive": true,
-    "location": "Dapur Kumoart, Jl. Contoh No. 123",
-    "price": 350000,
-    "quota": 20,
+    "discount": 20,
     "terms": [
-      "Termasuk bahan dan peralatan",
-      "Hasil workshop bisa dibawa pulang",
-      "Sertifikat partisipasi"
+      "Berlaku untuk kategori Boneka dan Aksesoris",
+      "Minimal pembelian Rp 100.000",
+      "Free gift wrapping",
+      "Include kartu ucapan handwritten"
     ]
   },
   {
     "id": 3,
-    "slug": "paket-hampers-valentine",
-    "title": "Paket Hampers Valentine",
-    "description": "Spesial Valentine! Paket hampers eksklusif berisi brownies, cookies, dan cokelat premium dalam kemasan mewah. Cocok untuk hadiah orang tersayang.",
-    "startDate": "2025-02-01",
-    "endDate": "2025-02-14",
-    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/valentine.jpg",
+    "slug": "bazaar-craft-market",
+    "title": "Bazaar Craft Market 2025",
+    "description": "Kunjungi booth Kumoart di Bazaar Craft Market! Temukan produk-produk eksklusif dengan harga spesial hanya di event ini.",
+    "startDate": "2025-03-15",
+    "endDate": "2025-03-16",
+    "image": "/images/events/placeholder.svg",
     "isActive": true,
-    "price": 275000,
+    "location": "Grand Atrium Mall Sentral, Lantai G",
     "terms": [
-      "Pre-order maksimal H-3",
-      "Free greeting card",
-      "Packaging premium"
+      "Booth nomor A-15",
+      "Buka jam 10.00 - 21.00",
+      "Flash sale setiap jam 14.00",
+      "Gratis gantungan kunci untuk 50 pembeli pertama/hari"
     ]
   },
   {
     "id": 4,
-    "slug": "bazar-natal-2024",
-    "title": "Bazar Natal 2024",
-    "description": "Kunjungi booth kami di Bazar Natal Mall Central. Tersedia berbagai produk spesial Natal dengan harga terbaik!",
-    "startDate": "2024-12-20",
-    "endDate": "2024-12-25",
-    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/bazar-natal.jpg",
+    "slug": "kelas-macrame-basic",
+    "title": "Kelas Macrame Basic",
+    "description": "Pelajari teknik dasar macrame untuk membuat wall hanging dan plant hanger. Kelas offline dengan instruktur berpengalaman.",
+    "startDate": "2025-01-20",
+    "endDate": "2025-01-20",
+    "image": "/images/events/placeholder.svg",
     "isActive": false,
-    "location": "Mall Central Lantai G",
+    "location": "Studio Kumoart",
+    "price": 300000,
+    "quota": 12,
     "terms": [
-      "Booth nomor 25",
-      "Buka jam 10.00 - 21.00"
+      "Termasuk material macrame cord",
+      "Durasi 3 jam",
+      "Cocok untuk pemula"
     ]
   },
   {
     "id": 5,
-    "slug": "flash-sale-anniversary",
-    "title": "Flash Sale Anniversary Kumoart",
-    "description": "Rayakan ulang tahun Kumoart yang ke-5 dengan flash sale besar-besaran! Diskon up to 50% untuk produk-produk pilihan.",
-    "startDate": "2025-06-01",
-    "endDate": "2025-06-07",
-    "image": "/images/events/placeholder.svg", "_originalImage": "/images/events/anniversary.jpg",
-    "isActive": false,
-    "discount": 50,
+    "slug": "custom-order-lebaran",
+    "title": "Pre-Order Custom Hampers Lebaran",
+    "description": "Pesan hampers rajut custom untuk Lebaran! Pilihan produk dan warna bisa disesuaikan. Kuota terbatas, pesan sekarang!",
+    "startDate": "2025-03-01",
+    "endDate": "2025-03-20",
+    "image": "/images/events/placeholder.svg",
+    "isActive": true,
+    "price": 350000,
     "terms": [
-      "Selama persediaan masih ada",
-      "Maksimal 2 item per customer",
-      "Tidak termasuk produk pre-order"
+      "Isi hampers: 1 tas + 1 dompet + 2 coaster",
+      "Pilihan 10 warna",
+      "Packaging eksklusif",
+      "Pengiriman mulai H-7 Lebaran"
     ]
   }
 ]

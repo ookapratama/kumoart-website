@@ -60,19 +60,19 @@ export default async function ProductDetailPage({ params }: Props) {
     .slice(0, 3);
 
   return (
-    <div className="py-12">
+    <div className="py-12 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="flex items-center text-sm text-gray-500 mb-8">
-          <Link href="/" className="hover:text-amber-600 transition-colors">
+          <Link href="/" className="hover:text-rose-600 transition-colors">
             Beranda
           </Link>
           <span className="mx-2">/</span>
-          <Link href="/produk" className="hover:text-amber-600 transition-colors">
+          <Link href="/produk" className="hover:text-rose-600 transition-colors">
             Produk
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-800 font-medium">{product.name}</span>
+          <span className="text-gray-900 font-medium">{product.name}</span>
         </nav>
 
         {/* Product Detail */}
@@ -81,7 +81,7 @@ export default async function ProductDetailPage({ params }: Props) {
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <section className="mt-16">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
               Produk Serupa
             </h2>
             <ProductList products={relatedProducts} />
@@ -92,7 +92,7 @@ export default async function ProductDetailPage({ params }: Props) {
         <div className="mt-12 text-center">
           <Link
             href="/produk"
-            className="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium transition-colors"
+            className="inline-flex items-center text-rose-600 hover:text-rose-700 font-medium transition-colors"
           >
             <svg
               className="mr-2 h-5 w-5"

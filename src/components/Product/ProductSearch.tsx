@@ -9,7 +9,7 @@ interface ProductSearchProps {
 
 export default function ProductSearch({
   onSearch,
-  placeholder = 'Cari produk...',
+  placeholder = 'Cari produk rajut...',
 }: ProductSearchProps) {
   const [query, setQuery] = useState('');
 
@@ -53,9 +53,9 @@ export default function ProductSearch({
           value={query}
           onChange={handleChange}
           placeholder={placeholder}
-          className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-full 
-                     focus:ring-2 focus:ring-amber-500 focus:border-amber-500 
-                     transition-all duration-200 outline-none
+          className="w-full pl-12 pr-12 py-3 border border-gray-200 rounded-full 
+                     focus:ring-2 focus:ring-rose-500 focus:border-rose-500 
+                     transition-all duration-200 outline-none bg-white
                      placeholder:text-gray-400"
         />
 

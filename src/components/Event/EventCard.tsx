@@ -9,9 +9,9 @@ interface EventCardProps {
 export default function EventCard({ event }: EventCardProps) {
   return (
     <Link href={`/event/${event.slug}`} className="group">
-      <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100">
         {/* Event Image */}
-        <div className="relative h-48 bg-gray-100 overflow-hidden">
+        <div className="relative h-48 bg-gray-50 overflow-hidden">
           <Image
             src={event.image}
             alt={event.title}
@@ -20,13 +20,13 @@ export default function EventCard({ event }: EventCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {event.discount && (
-            <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-              Diskon {event.discount}%
+            <span className="absolute top-2 right-2 bg-rose-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+              🎉 Diskon {event.discount}%
             </span>
           )}
           {event.isActive && (
-            <span className="absolute top-2 left-2 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1">
-              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+            <span className="absolute top-2 left-2 bg-gray-900 text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1">
+              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
               Aktif
             </span>
           )}
@@ -37,7 +37,7 @@ export default function EventCard({ event }: EventCardProps) {
           {/* Date */}
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
             <svg
-              className="h-4 w-4"
+              className="h-4 w-4 text-rose-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -53,7 +53,7 @@ export default function EventCard({ event }: EventCardProps) {
           </div>
 
           {/* Title */}
-          <h3 className="text-lg font-semibold text-gray-800 group-hover:text-amber-600 transition-colors line-clamp-2 mb-2">
+          <h3 className="text-lg font-semibold text-gray-800 group-hover:text-rose-600 transition-colors line-clamp-2 mb-2">
             {event.title}
           </h3>
 
@@ -65,7 +65,7 @@ export default function EventCard({ event }: EventCardProps) {
           {/* Price or Location */}
           <div className="flex items-center justify-between text-sm">
             {event.price && (
-              <span className="text-amber-600 font-semibold">
+              <span className="text-gray-900 font-semibold">
                 {formatEventPrice(event.price)}
               </span>
             )}

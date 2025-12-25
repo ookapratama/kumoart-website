@@ -11,17 +11,17 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Kumoart - Kue & Roti Berkualitas',
-    template: '%s | Kumoart',
+    default: 'Kumoart - Kerajinan Rajut Handmade',
+    template: '%s | Kumoart Handmade',
   },
   description:
-    'Kumoart menyediakan berbagai kue dan roti berkualitas dengan cita rasa terbaik. Dibuat dengan bahan pilihan dan penuh cinta.',
-  keywords: ['kue', 'roti', 'bakery', 'umkm', 'jajanan', 'kumoart'],
-  authors: [{ name: 'Kumoart' }],
+    'Kumoart menyediakan kerajinan rajut handmade berkualitas tinggi. Tas, boneka amigurumi, aksesoris, dan home decor dibuat dengan cinta.',
+  keywords: ['rajut', 'crochet', 'handmade', 'amigurumi', 'tas rajut', 'kerajinan tangan', 'umkm'],
+  authors: [{ name: 'Kumoart Handmade' }],
   openGraph: {
-    title: 'Kumoart - Kue & Roti Berkualitas',
+    title: 'Kumoart - Kerajinan Rajut Handmade',
     description:
-      'Kumoart menyediakan berbagai kue dan roti berkualitas dengan cita rasa terbaik.',
+      'Kerajinan rajut handmade berkualitas tinggi. Setiap jahitan adalah cerita, setiap produk adalah karya seni.',
     type: 'website',
     locale: 'id_ID',
   },
