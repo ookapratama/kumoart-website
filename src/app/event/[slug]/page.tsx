@@ -9,7 +9,7 @@ import {
   formatDateRange,
 } from '@/lib/events';
 import { config } from '@/lib/config';
-import { translations } from '@/lib/language';
+import { translations } from '@/lib/translations';
 
 interface Props {
   params: Promise<{

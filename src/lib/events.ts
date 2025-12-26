@@ -90,7 +90,10 @@ export function isEventUpcoming(startDate: string): boolean {
 /**
  * Format harga event ke Rupiah
  */
-export function formatEventPrice(price: number): string {
+export function formatEventPrice(price: number | undefined): string {
+  if (price === undefined || price === 0) {
+    return 'Gratis';
+  }
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',

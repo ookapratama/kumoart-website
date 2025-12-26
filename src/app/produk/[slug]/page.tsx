@@ -11,7 +11,7 @@ import {
   formatPrice,
 } from '@/lib/products';
 import { config } from '@/lib/config';
-import { translations } from '@/lib/language';
+import { translations } from '@/lib/translations';
 
 interface Props {
   params: Promise<{

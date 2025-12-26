@@ -118,7 +118,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {currentYear} {config.brand.fullName}. {t('footer.copyright')}</p>
+          <p>&copy; <span suppressHydrationWarning>{currentYear}</span> {config.brand.fullName}. {t('footer.copyright')}</p>
         </div>
       </div>
     </footer>
