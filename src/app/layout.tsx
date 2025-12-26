@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Layout/Navbar';
 import Footer from '@/components/Layout/Footer';
+import FloatingWhatsApp from '@/components/CTA/FloatingWhatsApp';
 import { config } from '@/lib/config';
 
 const inter = Inter({
@@ -161,6 +162,7 @@ export default function RootLayout({
             <main className="flex-grow">{children}</main>
             <Footer />
           </div>
+          <FloatingWhatsApp />
         </LanguageProvider>
       </body>
     </html>
