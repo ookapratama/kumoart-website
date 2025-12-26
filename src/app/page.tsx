@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import ProductList from '@/components/Product/ProductList';
 import EventList from '@/components/Event/EventList';
@@ -5,10 +7,12 @@ import WhatsAppButton from '@/components/CTA/WhatsAppButton';
 import { getFeaturedProducts } from '@/lib/products';
 import { getActiveEvents } from '@/lib/events';
 import { config } from '@/lib/config';
+import { useLanguage } from '@/lib/language';
 
 export default function HomePage() {
   const featuredProducts = getFeaturedProducts(6);
   const activeEvents = getActiveEvents();
+  const { t } = useLanguage();
 
   // JSON-LD Schema untuk Organization
   const organizationSchema = {
@@ -22,7 +26,7 @@ export default function HomePage() {
       '@type': 'ContactPoint',
       telephone: `+${config.whatsapp.number}`,
       contactType: 'customer service',
-      availableLanguage: 'Indonesian',
+      availableLanguage: ['Indonesian', 'English'],
     },
     sameAs: [
       config.social.instagram,
@@ -55,22 +59,19 @@ export default function HomePage() {
             {/* Hero Content */}
             <div className="text-center lg:text-left">
               <span className="inline-block text-rose-600 font-semibold mb-4 tracking-wide uppercase text-sm">
-                Kerajinan Tangan Berkualitas
+                {t('hero.subtitle')}
               </span>
               
               {/* H1 - SEO Primary Keyword */}
               <h1 id="hero-heading" className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                {config.brand.name} - Kerajinan Rajut
+                {t('hero.title1')}
                 <br />
-                <span className="text-rose-600">Handmade Berkualitas</span>
+                <span className="text-rose-600">{t('hero.title2')}</span>
               </h1>
               
               {/* SEO Description Text */}
               <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                Setiap jahitan adalah cerita, setiap produk adalah karya seni.
-                Temukan keindahan <strong>kerajinan rajut handmade</strong> yang 
-                dibuat khusus untuk Anda. <strong>Tas rajut</strong>, <strong>boneka amigurumi</strong>, 
-                dan <strong>aksesoris</strong> berkualitas tinggi.
+                {t('hero.description')}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -78,7 +79,7 @@ export default function HomePage() {
                   href="/produk"
                   className="inline-flex items-center justify-center px-8 py-3 bg-gray-900 text-white font-semibold rounded-full hover:bg-gray-800 transition-colors duration-200 shadow-lg hover:shadow-xl"
                 >
-                  Lihat Koleksi
+                  {t('hero.cta')}
                   <svg
                     className="ml-2 h-5 w-5"
                     fill="none"
@@ -105,7 +106,7 @@ export default function HomePage() {
                 <div className="text-center z-10">
                   <span className="text-8xl">🧶</span>
                   <p className="mt-4 text-rose-700 font-medium text-lg">
-                    Handmade with ❤️
+                    {t('misc.handmade_with_love')} ❤️
                   </p>
                 </div>
               </div>
@@ -122,7 +123,7 @@ export default function HomePage() {
       {/* Features Section */}
       <section className="py-16 bg-white" aria-labelledby="features-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 id="features-heading" className="sr-only">Keunggulan {config.brand.name}</h2>
+          <h2 id="features-heading" className="sr-only">{t('features.handmade.title')} {config.brand.name}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6 group hover:bg-rose-50 rounded-2xl transition-colors">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-100 text-rose-600 rounded-full mb-4 group-hover:scale-110 transition-transform">
@@ -130,20 +131,20 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">100% Handmade</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('features.handmade.title')}</h3>
               <p className="text-gray-500">
-                Setiap produk rajut dibuat tangan dengan penuh cinta dan perhatian pada detail
+                {t('features.handmade.desc')}
               </p>
             </div>
             <div className="text-center p-6 group hover:bg-rose-50 rounded-2xl transition-colors">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-100 text-rose-600 rounded-full mb-4 group-hover:scale-110 transition-transform">
                 <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Material Premium</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('features.premium.title')}</h3>
               <p className="text-gray-500">
-                Menggunakan benang dan bahan berkualitas tinggi yang aman dan tahan lama
+                {t('features.premium.desc')}
               </p>
             </div>
             <div className="text-center p-6 group hover:bg-rose-50 rounded-2xl transition-colors">
@@ -152,9 +153,9 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Custom Order</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('features.custom.title')}</h3>
               <p className="text-gray-500">
-                Bisa request warna dan desain sesuai keinginan Anda via WhatsApp
+                {t('features.custom.desc')}
               </p>
             </div>
           </div>
@@ -166,14 +167,13 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="text-rose-600 font-semibold uppercase tracking-wide text-sm">
-              Pilihan Terbaik
+              {t('products.subtitle')}
             </span>
             <h2 id="products-heading" className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">
-              Produk Rajut Favorit
+              {t('products.title')}
             </h2>
             <p className="mt-4 text-gray-500 max-w-2xl mx-auto">
-              Koleksi <strong>tas rajut</strong>, <strong>boneka amigurumi</strong>, dan 
-              <strong> aksesoris handmade</strong> terlaris yang disukai pelanggan kami
+              {t('products.description')}
             </p>
           </div>
           <ProductList products={featuredProducts} showViewAll={true} />
@@ -186,13 +186,13 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <span className="text-rose-600 font-semibold uppercase tracking-wide text-sm">
-                Jangan Lewatkan
+                {t('events.subtitle')}
               </span>
               <h2 id="events-heading" className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">
-                Event &amp; Promo
+                {t('events.title')}
               </h2>
               <p className="mt-4 text-gray-500 max-w-2xl mx-auto">
-                Workshop rajut, bazaar kerajinan, dan promo spesial untuk penggemar handmade
+                {t('events.description')}
               </p>
             </div>
             <EventList events={activeEvents} />
@@ -201,7 +201,7 @@ export default function HomePage() {
                 href="/event"
                 className="inline-flex items-center text-rose-600 hover:text-rose-700 font-semibold transition-colors"
               >
-                Lihat Semua Event
+                {t('events.view_all')}
                 <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -216,12 +216,10 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-5xl mb-6 block" aria-hidden="true">🧶</span>
           <h2 id="cta-heading" className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ingin Custom Order Produk Rajut?
+            {t('cta.title')}
           </h2>
           <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-            Kami menerima pesanan custom <strong className="text-white">tas rajut</strong>, 
-            <strong className="text-white"> boneka amigurumi</strong>, dan aksesoris dengan 
-            pilihan warna dan ukuran sesuai keinginan. Chat kami sekarang!
+            {t('cta.description')}
           </p>
           <WhatsAppButton
             variant="primary"

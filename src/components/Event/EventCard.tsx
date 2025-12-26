@@ -1,43 +1,105 @@
-import Link from 'next/link';
+'use client';
+
 import Image from 'next/image';
+import Link from 'next/link';
 import { Event, formatDateRange, formatEventPrice } from '@/lib/events';
+import { useLanguage } from '@/lib/language';
 
 interface EventCardProps {
   event: Event;
 }
 
 export default function EventCard({ event }: EventCardProps) {
+  const { t } = useLanguage();
+  
   return (
-    <Link href={`/event/${event.slug}`} className="group">
-      <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100">
-        {/* Event Image */}
-        <div className="relative h-48 bg-gray-50 overflow-hidden">
-          <Image
-            src={event.image}
-            alt={event.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-          {event.discount && (
-            <span className="absolute top-2 right-2 bg-rose-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-              🎉 Diskon {event.discount}%
+    <Link
+      href={`/event/${event.slug}`}
+      className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full ${
+        !event.isActive ? 'opacity-75 grayscale-[0.5]' : ''
+      }`}
+    >
+      {/* Event Image */}
+      <div className="relative aspect-[16/9] overflow-hidden bg-gray-50">
+        <Image
+          src={event.image}
+          alt={event.title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+        
+        {/* Status Badge */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {event.isActive ? (
+            <span className="bg-gray-900/90 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 border border-white/20">
+              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+              {t('events.ongoing')}
             </span>
-          )}
-          {event.isActive && (
-            <span className="absolute top-2 left-2 bg-gray-900 text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1">
-              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-              Aktif
+          ) : (
+            <span className="bg-gray-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              {t('events.ended')}
             </span>
           )}
         </div>
 
-        {/* Event Info */}
-        <div className="p-4">
-          {/* Date */}
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+        {/* Discount Badge */}
+        {event.discount && event.isActive && (
+          <div className="absolute top-3 right-3">
+            <span className="bg-rose-600 text-white text-xs font-black px-3 py-1.5 rounded-lg shadow-lg transform rotate-3">
+              -{event.discount}%
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Event Info */}
+      <div className="p-5 flex flex-col flex-grow">
+        {/* Date */}
+        <div className="flex items-center gap-2 text-rose-600 mb-3">
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+          <time className="text-xs font-bold uppercase tracking-wider">
+            {formatDateRange(event.startDate, event.endDate)}
+          </time>
+        </div>
+
+        <h3 className="text-gray-900 font-bold text-lg mb-2 group-hover:text-rose-600 transition-colors line-clamp-2 leading-tight">
+          {event.title}
+        </h3>
+        
+        <p className="text-gray-500 text-sm mb-4 line-clamp-2 leading-relaxed">
+          {event.description}
+        </p>
+
+        <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest leading-none mb-1">
+              {t('events.price')}
+            </span>
+            <span className="text-gray-900 font-black">
+              {formatEventPrice(event.price)}
+            </span>
+          </div>
+          
+          <button className={`p-2 rounded-full transition-colors ${
+            event.isActive 
+              ? 'bg-rose-50 text-rose-600 group-hover:bg-rose-600 group-hover:text-white' 
+              : 'bg-gray-100 text-gray-400'
+          }`}>
             <svg
-              className="h-4 w-4 text-rose-500"
+              className="w-5 h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -46,54 +108,10 @@ export default function EventCard({ event }: EventCardProps) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
               />
             </svg>
-            <span>{formatDateRange(event.startDate, event.endDate)}</span>
-          </div>
-
-          {/* Title */}
-          <h3 className="text-lg font-semibold text-gray-800 group-hover:text-rose-600 transition-colors line-clamp-2 mb-2">
-            {event.title}
-          </h3>
-
-          {/* Description */}
-          <p className="text-sm text-gray-500 line-clamp-2 mb-3">
-            {event.description}
-          </p>
-
-          {/* Price or Location */}
-          <div className="flex items-center justify-between text-sm">
-            {event.price && (
-              <span className="text-gray-900 font-semibold">
-                {formatEventPrice(event.price)}
-              </span>
-            )}
-            {event.location && (
-              <span className="text-gray-400 flex items-center gap-1">
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-                <span className="truncate max-w-[150px]">{event.location}</span>
-              </span>
-            )}
-          </div>
+          </button>
         </div>
       </div>
     </Link>

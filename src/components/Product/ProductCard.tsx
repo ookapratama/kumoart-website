@@ -1,54 +1,66 @@
-import Link from 'next/link';
+'use client';
+
 import Image from 'next/image';
+import Link from 'next/link';
 import { Product, formatPrice } from '@/lib/products';
+import { useLanguage } from '@/lib/language';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { t } = useLanguage();
+  
   return (
-    <Link href={`/produk/${product.slug}`} className="group">
-      <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100">
-        {/* Product Image */}
-        <div className="relative h-52 bg-gray-50 overflow-hidden">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+    <Link 
+      href={`/produk/${product.slug}`}
+      className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
+    >
+      {/* Product Image */}
+      <div className="relative aspect-square overflow-hidden bg-gray-50">
+        <Image
+          src={product.image}
+          alt={product.name}
+          fill
+          className="object-cover group-hover:scale-110 transition-transform duration-500"
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+        />
+        {/* Badges */}
+        <div className="absolute top-2 left-2 flex flex-col gap-2">
           {product.isFeatured && (
-            <span className="absolute top-2 right-2 bg-rose-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
-              ✨ Favorit
+            <span className="bg-rose-600 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider transform -rotate-2">
+              ✨ {t('products.featured')}
             </span>
           )}
           {product.stock <= 5 && product.stock > 0 && (
-            <span className="absolute top-2 left-2 bg-gray-900 text-white text-xs font-semibold px-2 py-1 rounded-full">
-              Stok Terbatas
+            <span className="bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider animate-pulse">
+              🔥 {t('products.limited_stock')}
+            </span>
+          )}
+          {product.stock === 0 && (
+            <span className="bg-gray-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">
+              🚫 {t('products.sold_out')}
             </span>
           )}
         </div>
+      </div>
 
-        {/* Product Info */}
-        <div className="p-4">
-          <span className="text-xs text-rose-600 font-medium uppercase tracking-wide">
-            {product.category}
+      {/* Product Info */}
+      <div className="p-4 flex flex-col flex-grow">
+        <span className="text-xs text-rose-500 font-semibold uppercase tracking-wider mb-1">
+          {product.category}
+        </span>
+        <h3 className="text-gray-900 font-bold mb-2 line-clamp-2 group-hover:text-rose-600 transition-colors">
+          {product.name}
+        </h3>
+        <div className="mt-auto pt-2 flex items-center justify-between">
+          <span className="text-lg font-black text-gray-900">
+            {formatPrice(product.price)}
           </span>
-          <h3 className="mt-1 text-lg font-semibold text-gray-800 group-hover:text-rose-600 transition-colors line-clamp-1">
-            {product.name}
-          </h3>
-          <p className="mt-1 text-sm text-gray-500 line-clamp-2">
-            {product.description}
-          </p>
-          <div className="mt-3 flex items-center justify-between">
-            <span className="text-lg font-bold text-gray-900">
-              {formatPrice(product.price)}
-            </span>
-            <span className="text-xs text-gray-400">
-              Stok: {product.stock}
-            </span>
+          <div className="flex items-center gap-1 text-[10px] text-gray-400 font-medium">
+            <span className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-emerald-400' : 'bg-rose-400'}`}></span>
+            {product.stock > 0 ? `${t('products.stock')}: ${product.stock}` : t('products.sold_out')}
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import ProductDetail from '@/components/Product/ProductDetail';
 import ProductList from '@/components/Product/ProductList';
+import Breadcrumbs from '@/components/UI/Breadcrumbs';
 import {
   getProductBySlug,
   getAllProductSlugs,
@@ -10,6 +11,7 @@ import {
   formatPrice,
 } from '@/lib/products';
 import { config } from '@/lib/config';
+import { translations } from '@/lib/language';
 
 interface Props {
   params: Promise<{
@@ -139,32 +141,13 @@ export default async function ProductDetailPage({ params }: Props) {
       
       <div className="py-12 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb dengan Schema */}
-          <nav 
-            className="flex items-center text-sm text-gray-500 mb-8"
-            aria-label="Breadcrumb"
-          >
-            <ol className="flex items-center" itemScope itemType="https://schema.org/BreadcrumbList">
-              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <Link href="/" className="hover:text-rose-600 transition-colors" itemProp="item">
-                  <span itemProp="name">Beranda</span>
-                </Link>
-                <meta itemProp="position" content="1" />
-              </li>
-              <span className="mx-2">/</span>
-              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <Link href="/produk" className="hover:text-rose-600 transition-colors" itemProp="item">
-                  <span itemProp="name">Produk</span>
-                </Link>
-                <meta itemProp="position" content="2" />
-              </li>
-              <span className="mx-2">/</span>
-              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <span className="text-gray-900 font-medium" itemProp="name">{product.name}</span>
-                <meta itemProp="position" content="3" />
-              </li>
-            </ol>
-          </nav>
+          {/* Breadcrumbs with Translation Support */}
+          <Breadcrumbs 
+            items={[
+              { label: translations.id['breadcrumb.products'], href: '/produk' },
+              { label: product.name }
+            ]} 
+          />
 
           {/* H1 - SEO Important */}
           <h1 className="sr-only">{product.name} - {product.category} | {config.brand.name}</h1>
@@ -176,7 +159,7 @@ export default async function ProductDetailPage({ params }: Props) {
           {relatedProducts.length > 0 && (
             <section className="mt-16" aria-labelledby="related-products-heading">
               <h2 id="related-products-heading" className="text-2xl font-bold text-gray-900 mb-6">
-                Produk Serupa
+                PRODUK SERUPA
               </h2>
               <ProductList products={relatedProducts} />
             </section>
@@ -186,7 +169,7 @@ export default async function ProductDetailPage({ params }: Props) {
           <div className="mt-12 text-center">
             <Link
               href="/produk"
-              className="inline-flex items-center text-rose-600 hover:text-rose-700 font-medium transition-colors"
+              className="inline-flex items-center text-rose-600 hover:text-rose-700 font-semibold transition-colors"
             >
               <svg
                 className="mr-2 h-5 w-5"
@@ -202,7 +185,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   d="M7 16l-4-4m0 0l4-4m-4 4h18"
                 />
               </svg>
-              Kembali ke Katalog
+              KEMBALI KE KATALOG
             </Link>
           </div>
         </div>

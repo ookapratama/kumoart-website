@@ -119,6 +119,8 @@ export const metadata: Metadata = {
   category: 'shopping',
 };
 
+import { LanguageProvider } from '@/lib/language';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -153,11 +155,13 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased bg-gray-50`}>
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </div>
+        <LanguageProvider>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
+        </LanguageProvider>
       </body>
     </html>
   );

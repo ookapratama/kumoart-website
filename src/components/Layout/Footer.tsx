@@ -1,22 +1,26 @@
+'use client';
+
 import Link from 'next/link';
 import { config } from '@/lib/config';
-
-const footerLinks = {
-  menu: [
-    { name: 'Beranda', href: '/' },
-    { name: 'Produk', href: '/produk' },
-    { name: 'Event', href: '/event' },
-  ],
-  categories: [
-    { name: 'Tas Rajut', href: '/produk?category=tas' },
-    { name: 'Boneka Amigurumi', href: '/produk?category=boneka' },
-    { name: 'Aksesoris', href: '/produk?category=aksesoris' },
-    { name: 'Home Decor', href: '/produk?category=home-decor' },
-  ],
-};
+import { useLanguage } from '@/lib/language';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
+
+  const footerLinks = {
+    menu: [
+      { name: t('nav.home'), href: '/' },
+      { name: t('nav.products'), href: '/produk' },
+      { name: t('nav.events'), href: '/event' },
+    ],
+    categories: [
+      { name: 'Tas Rajut', href: '/produk?category=tas' },
+      { name: 'Boneka Amigurumi', href: '/produk?category=boneka' },
+      { name: 'Aksesoris', href: '/produk?category=aksesoris' },
+      { name: 'Home Decor', href: '/produk?category=home-decor' },
+    ],
+  };
 
   return (
     <footer className="bg-gray-900 text-gray-300">
@@ -29,9 +33,7 @@ export default function Footer() {
               <span className="text-sm text-rose-400 font-medium">{config.brand.tagline}</span>
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
-              Kerajinan rajut handmade berkualitas tinggi. Setiap produk dibuat
-              dengan penuh cinta dan perhatian pada detail untuk menghadirkan
-              keindahan dalam setiap jahitan.
+              {t('footer.description')}
             </p>
             <div className="flex space-x-4">
               {/* Instagram */}
@@ -81,7 +83,7 @@ export default function Footer() {
 
           {/* Menu Links */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Menu</h4>
+            <h4 className="text-white font-semibold mb-4">{t('footer.menu')}</h4>
             <ul className="space-y-2">
               {footerLinks.menu.map((link) => (
                 <li key={link.name}>
@@ -98,7 +100,7 @@ export default function Footer() {
 
           {/* Category Links */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Kategori</h4>
+            <h4 className="text-white font-semibold mb-4">{t('footer.categories')}</h4>
             <ul className="space-y-2">
               {footerLinks.categories.map((link) => (
                 <li key={link.name}>
@@ -116,7 +118,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {currentYear} {config.brand.fullName}. Dibuat dengan 🧶 dan ❤️</p>
+          <p>&copy; {currentYear} {config.brand.fullName}. {t('footer.copyright')}</p>
         </div>
       </div>
     </footer>
