@@ -56,7 +56,7 @@ export default function ProductSearch({
           className="w-full pl-12 pr-12 py-3 border border-gray-200 rounded-full 
                      focus:ring-2 focus:ring-rose-500 focus:border-rose-500 
                      transition-all duration-200 outline-none bg-white
-                     placeholder:text-gray-400"
+                     placeholder:text-gray-400 text-gray-600"
         />
 
         {/* Clear Button */}
