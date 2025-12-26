@@ -7,7 +7,7 @@
     "startDate": "2025-02-08",
     "endDate": "2025-02-08",
     "image": "/images/events/placeholder.svg",
-    "isActive": true,
+    "isActive": false,
     "location": "Studio Kumoart, Jl. Kreatif No. 45",
     "price": 250000,
     "quota": 15,
@@ -26,7 +26,7 @@
     "startDate": "2025-02-01",
     "endDate": "2025-02-14",
     "image": "/images/events/placeholder.svg",
-    "isActive": true,
+    "isActive": false,
     "discount": 20,
     "terms": [
       "Berlaku untuk kategori Boneka dan Aksesoris",
@@ -43,7 +43,7 @@
     "startDate": "2025-03-15",
     "endDate": "2025-03-16",
     "image": "/images/events/placeholder.svg",
-    "isActive": true,
+    "isActive": false,
     "location": "Grand Atrium Mall Sentral, Lantai G",
     "terms": [
       "Booth nomor A-15",
@@ -78,7 +78,7 @@
     "startDate": "2025-03-01",
     "endDate": "2025-03-20",
     "image": "/images/events/placeholder.svg",
-    "isActive": true,
+    "isActive": false,
     "price": 350000,
     "terms": [
       "Isi hampers: 1 tas + 1 dompet + 2 coaster",
