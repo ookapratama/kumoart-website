@@ -29,11 +29,11 @@ export default function EventPage() {
 
         {/* Active Events */}
         <section className="mb-16" aria-labelledby="active-events-heading">
-          <div className="flex items-center gap-3 mb-6">
-            <h2 id="active-events-heading" className="text-2xl font-bold text-gray-900">
+          <div className="flex items-center flex-wrap gap-x-4 gap-y-2 mb-8">
+            <h2 id="active-events-heading" className="text-xl md:text-2xl font-black text-gray-900 tracking-tight">
               {t('events.active')}
             </h2>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-rose-100 text-rose-700">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-700 border border-rose-200 uppercase tracking-widest shadow-sm">
               <span className="w-2 h-2 bg-rose-500 rounded-full mr-2 animate-pulse" aria-hidden="true"></span>
               {activeEvents.length} {t('nav.events')}
             </span>
@@ -54,7 +54,7 @@ export default function EventPage() {
         {/* Past/Inactive Events */}
         {inactiveEvents.length > 0 && (
           <section aria-labelledby="past-events-heading">
-            <h2 id="past-events-heading" className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 id="past-events-heading" className="text-xl md:text-2xl font-black text-gray-900 mb-6 tracking-tight">
               {t('events.finished')}
             </h2>
             <div className="opacity-60">
