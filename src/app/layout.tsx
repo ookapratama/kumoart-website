@@ -5,6 +5,7 @@ import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
 import FloatingWhatsApp from "@/components/CTA/FloatingWhatsApp";
 import { config } from "@/lib/config";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -168,6 +169,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <FloatingWhatsApp />
+          <Analytics />
         </LanguageProvider>
       </body>
     </html>
