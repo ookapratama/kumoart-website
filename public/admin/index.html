@@ -21,7 +21,7 @@
     <div id="nc-root"></div>
 
     <script>
-      // Manual init to avoid race conditions
+      // Manual init to allow dynamic configuration
       window.CMS_MANUAL_INIT = true;
     </script>
 
@@ -32,7 +32,18 @@
       // Wait for DOM and Script
       window.onload = function () {
         if (window.CMS) {
-          window.CMS.init();
+          // Detect current origin for OAuth
+          const currentOrigin = window.location.origin;
+
+          window.CMS.init({
+            config: {
+              backend: {
+                // This forces the CMS to use your Next.js API routes instead of Netlify
+                base_url: currentOrigin,
+                auth_endpoint: "api/auth",
+              },
+            },
+          });
         }
       };
     </script>
