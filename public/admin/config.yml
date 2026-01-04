@@ -5,7 +5,8 @@ backend:
   name: github
   repo: ookapratama/kumoart-website
   branch: main
-  base_url: https://kumoart.id
+  # base_url dikosongkan agar mengikuti domain tempat CMS dijalankan
+  base_url: ""
   auth_endpoint: /api/auth
 
 local_backend: true
@@ -14,9 +15,9 @@ local_backend: true
 media_folder: public/images/uploads
 public_folder: /images/uploads
 
-# Pengaturan situs
-site_url: https://kumoart.id
-display_url: https://kumoart.id
+# Pengaturan situs (biarkan kosong agar otomatis mendeteksi domain)
+site_url: ""
+display_url: ""
 logo_url: /logo.png
 
 # Lokalisasi
