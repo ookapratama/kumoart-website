@@ -5,6 +5,7 @@ backend:
   name: github
   repo: ookapratama/kumoart-website
   branch: main
+  client_id: process.env.GITHUB_CLIENT_ID
   # base_url dikosongkan agar mengikuti domain tempat CMS dijalankan
   base_url: ""
   auth_endpoint: /api/auth
