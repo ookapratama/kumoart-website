@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable static export for SSG
-  output: "export",
-
   // Image configuration
   images: {
     // Untuk static export, gunakan unoptimized images
