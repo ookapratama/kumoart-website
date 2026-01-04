@@ -1,0 +1,252 @@
+# Decap CMS Configuration for Kumo Art Craft
+# Docs: https://decapcms.org/docs/configuration-options/
+
+backend:
+  name: github
+  repo: ookapratama/kumoart-website
+  branch: main
+  base_url: https://kumoart.id
+  auth_endpoint: /api/auth
+
+local_backend: true
+
+# Lokasi penyimpanan media/gambar
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+# Pengaturan situs
+site_url: https://kumoart.id
+display_url: https://kumoart.id
+logo_url: /logo.png
+
+# Lokalisasi
+locale: "id"
+
+# Slug settings
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
+# Collections (Products & Events)
+collections:
+  # ===================
+  # PRODUCTS COLLECTION
+  # ===================
+  - name: "products"
+    label: "📦 Produk"
+    label_singular: "Produk"
+    folder: "content/products"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: name
+    extension: "md"
+    format: "frontmatter"
+    sortable_fields: ["name", "price", "category", "isActive"]
+    view_filters:
+      - label: "Produk Aktif"
+        field: isActive
+        pattern: true
+      - label: "Produk Featured"
+        field: isFeatured
+        pattern: true
+    view_groups:
+      - label: "Kategori"
+        field: category
+    summary: "{{name}} - {{category}} - Rp {{price}}"
+    fields:
+      - label: "Nama Produk"
+        name: "name"
+        widget: "string"
+        required: true
+        hint: "Nama lengkap produk"
+
+      - label: "Slug (URL)"
+        name: "slug"
+        widget: "string"
+        required: true
+        pattern:
+          [
+            "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "Gunakan huruf kecil dan dash (contoh: tas-rajut-macrame)",
+          ]
+        hint: "URL produk akan menjadi /produk/slug-ini"
+
+      - label: "Deskripsi"
+        name: "description"
+        widget: "text"
+        required: true
+        hint: "Deskripsi singkat produk (1-2 kalimat)"
+
+      - label: "Harga (Rp)"
+        name: "price"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        required: true
+        hint: "Harga dalam Rupiah tanpa titik (contoh: 185000)"
+
+      - label: "Kategori"
+        name: "category"
+        widget: "select"
+        required: true
+        options:
+          - { label: "Tas", value: "Tas" }
+          - { label: "Aksesoris", value: "Aksesoris" }
+          - { label: "Boneka", value: "Boneka" }
+          - { label: "Home Decor", value: "Home Decor" }
+        default: "Tas"
+
+      - label: "Gambar Produk"
+        name: "image"
+        widget: "image"
+        required: true
+        allow_multiple: false
+        hint: "Upload gambar produk (rasio 1:1 recommended)"
+
+      - label: "Produk Unggulan (Featured)"
+        name: "isFeatured"
+        widget: "boolean"
+        default: false
+        hint: "Tampilkan di halaman utama?"
+
+      - label: "Status Aktif"
+        name: "isActive"
+        widget: "boolean"
+        default: true
+        hint: "Non-aktifkan untuk menyembunyikan dari website"
+
+      - label: "Stok"
+        name: "stock"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        default: 10
+        required: true
+        hint: "Jumlah stok tersedia"
+
+      - label: "Konten Detail (Opsional)"
+        name: "body"
+        widget: "markdown"
+        required: false
+        hint: "Deskripsi panjang dengan formatting (opsional)"
+
+  # =================
+  # EVENTS COLLECTION
+  # =================
+  - name: "events"
+    label: "🎉 Event"
+    label_singular: "Event"
+    folder: "content/events"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: title
+    extension: "md"
+    format: "frontmatter"
+    sortable_fields: ["title", "startDate", "isActive"]
+    view_filters:
+      - label: "Event Aktif"
+        field: isActive
+        pattern: true
+    summary: "{{title}} - {{startDate}}"
+    fields:
+      - label: "Nama Event"
+        name: "title"
+        widget: "string"
+        required: true
+        hint: "Judul event"
+
+      - label: "Slug (URL)"
+        name: "slug"
+        widget: "string"
+        required: true
+        pattern:
+          [
+            "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "Gunakan huruf kecil dan dash (contoh: workshop-amigurumi)",
+          ]
+        hint: "URL event akan menjadi /event/slug-ini"
+
+      - label: "Deskripsi"
+        name: "description"
+        widget: "text"
+        required: true
+        hint: "Deskripsi singkat event"
+
+      - label: "Tanggal Mulai"
+        name: "startDate"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        required: true
+
+      - label: "Tanggal Selesai"
+        name: "endDate"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        required: true
+
+      - label: "Gambar Event"
+        name: "image"
+        widget: "image"
+        required: true
+        allow_multiple: false
+        hint: "Banner atau poster event"
+
+      - label: "Status Aktif"
+        name: "isActive"
+        widget: "boolean"
+        default: true
+        hint: "Event sedang berlangsung?"
+
+      - label: "Lokasi"
+        name: "location"
+        widget: "string"
+        required: false
+        hint: "Lokasi event (kosongkan jika online/promo)"
+
+      - label: "Harga Tiket/Pendaftaran (Rp)"
+        name: "price"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        required: false
+        hint: "Isi 0 atau kosongkan untuk event gratis"
+
+      - label: "Diskon (%)"
+        name: "discount"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        max: 100
+        required: false
+        hint: "Untuk event promo, isi persentase diskon"
+
+      - label: "Kuota Peserta"
+        name: "quota"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        required: false
+        hint: "Maksimum peserta (kosongkan jika tidak ada batas)"
+
+      - label: "Syarat & Ketentuan"
+        name: "terms"
+        widget: "list"
+        required: false
+        hint: "Syarat dan ketentuan event"
+        field:
+          label: "Item"
+          name: "item"
+          widget: "string"
+
+      - label: "Konten Detail (Opsional)"
+        name: "body"
+        widget: "markdown"
+        required: false
+        hint: "Informasi detail event dengan formatting"

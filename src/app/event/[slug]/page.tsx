@@ -1,15 +1,15 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import EventDetail from '@/components/Event/EventDetail';
-import Breadcrumbs from '@/components/UI/Breadcrumbs';
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import EventDetail from "@/components/Event/EventDetail";
+import Breadcrumbs from "@/components/UI/Breadcrumbs";
+import { formatDateRange } from "@/lib/events";
 import {
-  getEventBySlug,
-  getAllEventSlugs,
-  formatDateRange,
-} from '@/lib/events';
-import { config } from '@/lib/config';
-import { translations } from '@/lib/translations';
+  getEventBySlugServer as getEventBySlug,
+  getAllEventSlugsServer as getAllEventSlugs,
+} from "@/lib/events.server";
+import { config } from "@/lib/config";
+import { translations } from "@/lib/translations";
 
 interface Props {
   params: Promise<{
@@ -32,39 +32,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!event) {
     return {
-      title: 'Event Tidak Ditemukan',
-      description: 'Event yang Anda cari tidak tersedia.',
+      title: "Event Tidak Ditemukan",
+      description: "Event yang Anda cari tidak tersedia.",
     };
   }
 
   const dateRange = formatDateRange(event.startDate, event.endDate);
   const title = event.title;
-  const description = `${event.description} Tanggal: ${dateRange}.${event.discount ? ` Diskon ${event.discount}%!` : ''} Info lebih lanjut via WhatsApp.`;
+  const description = `${event.description} Tanggal: ${dateRange}.${
+    event.discount ? ` Diskon ${event.discount}%!` : ""
+  } Info lebih lanjut via WhatsApp.`;
   const eventUrl = `${config.site.url}/event/${event.slug}`;
 
   return {
     title,
     description,
-    
+
     // Keywords spesifik event
     keywords: [
       event.title.toLowerCase(),
-      'event',
-      'promo',
-      event.discount ? 'diskon' : '',
-      'workshop',
-      'bazaar',
+      "event",
+      "promo",
+      event.discount ? "diskon" : "",
+      "workshop",
+      "bazaar",
       config.brand.name.toLowerCase(),
     ].filter(Boolean),
-    
+
     // Canonical URL
     alternates: {
       canonical: `/event/${event.slug}`,
     },
-    
+
     // Open Graph
     openGraph: {
-      type: 'website',
+      type: "website",
       title: `${event.title} | ${config.brand.name}`,
       description,
       url: eventUrl,
@@ -77,12 +79,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           alt: event.title,
         },
       ],
-      locale: 'id_ID',
+      locale: "id_ID",
     },
-    
+
     // Twitter Card
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: event.title,
       description: event.description,
       images: [event.image],
@@ -100,40 +102,45 @@ export default async function EventDetailPage({ params }: Props) {
 
   // JSON-LD Schema untuk Event
   const eventSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Event',
+    "@context": "https://schema.org",
+    "@type": "Event",
     name: event.title,
     description: event.description,
     image: `${config.site.url}${event.image}`,
     startDate: event.startDate,
     endDate: event.endDate,
-    eventStatus: event.isActive 
-      ? 'https://schema.org/EventScheduled' 
-      : 'https://schema.org/EventCancelled',
-    eventAttendanceMode: event.location 
-      ? 'https://schema.org/OfflineEventAttendanceMode'
-      : 'https://schema.org/OnlineEventAttendanceMode',
-    location: event.location ? {
-      '@type': 'Place',
-      name: event.location,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Indonesia',
-      },
-    } : undefined,
+    eventStatus: event.isActive
+      ? "https://schema.org/EventScheduled"
+      : "https://schema.org/EventCancelled",
+    eventAttendanceMode: event.location
+      ? "https://schema.org/OfflineEventAttendanceMode"
+      : "https://schema.org/OnlineEventAttendanceMode",
+    location: event.location
+      ? {
+          "@type": "Place",
+          name: event.location,
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Indonesia",
+          },
+        }
+      : undefined,
     organizer: {
-      '@type': 'Organization',
+      "@type": "Organization",
       name: config.brand.fullName,
       url: config.site.url,
     },
-    offers: event.price !== undefined ? {
-      '@type': 'Offer',
-      price: event.price,
-      priceCurrency: 'IDR',
-      availability: event.isActive 
-        ? 'https://schema.org/InStock' 
-        : 'https://schema.org/SoldOut',
-    } : undefined,
+    offers:
+      event.price !== undefined
+        ? {
+            "@type": "Offer",
+            price: event.price,
+            priceCurrency: "IDR",
+            availability: event.isActive
+              ? "https://schema.org/InStock"
+              : "https://schema.org/SoldOut",
+          }
+        : undefined,
   };
 
   return (
@@ -143,15 +150,15 @@ export default async function EventDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventSchema) }}
       />
-      
+
       <div className="py-12 bg-gray-50 min-h-screen">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumbs with Translation Support */}
-          <Breadcrumbs 
+          <Breadcrumbs
             items={[
-              { label: translations.id['breadcrumb.events'], href: '/event' },
-              { label: event.title }
-            ]} 
+              { label: translations.id["breadcrumb.events"], href: "/event" },
+              { label: event.title },
+            ]}
           />
 
           {/* Event Detail Client Component */}

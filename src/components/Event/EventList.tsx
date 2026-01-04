@@ -1,5 +1,5 @@
-import { Event } from '@/lib/events';
-import EventCard from './EventCard';
+import { Event } from "@/lib/events";
+import EventCard from "./EventCard";
 
 interface EventListProps {
   events: Event[];
@@ -42,7 +42,7 @@ export default function EventList({ events, title }: EventListProps) {
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {events.map((event) => (
-          <EventCard key={event.id} event={event} />
+          <EventCard key={event.slug} event={event} />
         ))}
       </div>
     </div>

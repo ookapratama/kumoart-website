@@ -124,12 +124,15 @@ export const metadata: Metadata = {
 };
 
 import { LanguageProvider } from "@/lib/language";
+import { getActiveEventsServer } from "@/lib/events.server";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const activeEvents = getActiveEventsServer();
+
   return (
     <html lang="id" suppressHydrationWarning>
       <head>
@@ -160,7 +163,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased bg-gray-50`}>
         <LanguageProvider>
           <div className="flex flex-col min-h-screen">
-            <Navbar />
+            <Navbar activeEvents={activeEvents} />
             <main className="flex-grow">{children}</main>
             <Footer />
           </div>

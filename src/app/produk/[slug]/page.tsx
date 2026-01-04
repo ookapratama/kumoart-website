@@ -1,17 +1,17 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import ProductDetail from '@/components/Product/ProductDetail';
-import ProductList from '@/components/Product/ProductList';
-import Breadcrumbs from '@/components/UI/Breadcrumbs';
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import ProductDetail from "@/components/Product/ProductDetail";
+import ProductList from "@/components/Product/ProductList";
+import Breadcrumbs from "@/components/UI/Breadcrumbs";
+import { formatPrice } from "@/lib/products";
 import {
-  getProductBySlug,
-  getAllProductSlugs,
-  getAllProducts,
-  formatPrice,
-} from '@/lib/products';
-import { config } from '@/lib/config';
-import { translations } from '@/lib/translations';
+  getProductBySlugServer as getProductBySlug,
+  getAllProductSlugsServer as getAllProductSlugs,
+  getAllProductsServer as getAllProducts,
+} from "@/lib/products.server";
+import { config } from "@/lib/config";
+import { translations } from "@/lib/translations";
 
 interface Props {
   params: Promise<{
@@ -34,38 +34,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!product) {
     return {
-      title: 'Produk Tidak Ditemukan',
-      description: 'Produk yang Anda cari tidak tersedia.',
+      title: "Produk Tidak Ditemukan",
+      description: "Produk yang Anda cari tidak tersedia.",
     };
   }
 
   const title = `${product.name} - ${product.category}`;
-  const description = `${product.description} Harga: ${formatPrice(product.price)}. Pesan langsung via WhatsApp!`;
+  const description = `${product.description} Harga: ${formatPrice(
+    product.price
+  )}. Pesan langsung via WhatsApp!`;
   const productUrl = `${config.site.url}/produk/${product.slug}`;
 
   return {
     title,
     description,
-    
+
     // Keywords spesifik produk
     keywords: [
       product.name.toLowerCase(),
       product.category.toLowerCase(),
-      'rajut',
-      'handmade',
-      'beli',
-      'pesan',
+      "rajut",
+      "handmade",
+      "beli",
+      "pesan",
       config.brand.name.toLowerCase(),
     ],
-    
+
     // Canonical URL
     alternates: {
       canonical: `/produk/${product.slug}`,
     },
-    
+
     // Open Graph untuk sharing
     openGraph: {
-      type: 'website',
+      type: "website",
       title: `${product.name} | ${config.brand.name}`,
       description,
       url: productUrl,
@@ -78,12 +80,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           alt: product.name,
         },
       ],
-      locale: 'id_ID',
+      locale: "id_ID",
     },
-    
+
     // Twitter Card
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: `${product.name} - ${formatPrice(product.price)}`,
       description: product.description,
       images: [product.image],
@@ -107,24 +109,25 @@ export default async function ProductDetailPage({ params }: Props) {
 
   // JSON-LD Schema untuk Product
   const productSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
+    "@context": "https://schema.org",
+    "@type": "Product",
     name: product.name,
     description: product.description,
     image: `${config.site.url}${product.image}`,
     brand: {
-      '@type': 'Brand',
+      "@type": "Brand",
       name: config.brand.name,
     },
     offers: {
-      '@type': 'Offer',
+      "@type": "Offer",
       price: product.price,
-      priceCurrency: 'IDR',
-      availability: product.stock > 0 
-        ? 'https://schema.org/InStock' 
-        : 'https://schema.org/OutOfStock',
+      priceCurrency: "IDR",
+      availability:
+        product.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
       seller: {
-        '@type': 'Organization',
+        "@type": "Organization",
         name: config.brand.fullName,
       },
     },
@@ -138,27 +141,38 @@ export default async function ProductDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
-      
+
       <div className="py-12 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumbs with Translation Support */}
-          <Breadcrumbs 
+          <Breadcrumbs
             items={[
-              { label: translations.id['breadcrumb.products'], href: '/produk' },
-              { label: product.name }
-            ]} 
+              {
+                label: translations.id["breadcrumb.products"],
+                href: "/produk",
+              },
+              { label: product.name },
+            ]}
           />
 
           {/* H1 - SEO Important */}
-          <h1 className="sr-only">{product.name} - {product.category} | {config.brand.name}</h1>
+          <h1 className="sr-only">
+            {product.name} - {product.category} | {config.brand.name}
+          </h1>
 
           {/* Product Detail */}
           <ProductDetail product={product} />
 
           {/* Related Products */}
           {relatedProducts.length > 0 && (
-            <section className="mt-16" aria-labelledby="related-products-heading">
-              <h2 id="related-products-heading" className="text-2xl font-bold text-gray-900 mb-6">
+            <section
+              className="mt-16"
+              aria-labelledby="related-products-heading"
+            >
+              <h2
+                id="related-products-heading"
+                className="text-2xl font-bold text-gray-900 mb-6"
+              >
                 PRODUK SERUPA
               </h2>
               <ProductList products={relatedProducts} />

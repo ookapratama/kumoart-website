@@ -4,16 +4,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { config } from "@/lib/config";
-import { getActiveEvents } from "@/lib/events";
 import LanguageSwitch from "@/components/UI/LanguageSwitch";
 import { useLanguage } from "@/lib/language";
+import { Event } from "@/lib/events";
 
-export default function Navbar() {
+interface NavbarProps {
+  activeEvents?: Event[];
+}
+
+export default function Navbar({ activeEvents = [] }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
 
   // Check if there are active events
-  const activeEvents = getActiveEvents();
   const hasActiveEvents = activeEvents.length > 0;
 
   const navigation = [

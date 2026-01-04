@@ -1,5 +1,3 @@
-import eventsData from '@/data/events.json';
-
 export interface Event {
   id: number;
   slug: string;
@@ -14,34 +12,7 @@ export interface Event {
   location?: string;
   quota?: number;
   terms: string[];
-}
-
-/**
- * Mendapatkan semua event
- */
-export function getAllEvents(): Event[] {
-  return eventsData as Event[];
-}
-
-/**
- * Mendapatkan event aktif saja
- */
-export function getActiveEvents(): Event[] {
-  return (eventsData as Event[]).filter((event) => event.isActive);
-}
-
-/**
- * Mendapatkan event berdasarkan slug
- */
-export function getEventBySlug(slug: string): Event | undefined {
-  return (eventsData as Event[]).find((event) => event.slug === slug);
-}
-
-/**
- * Mendapatkan semua slugs untuk static generation
- */
-export function getAllEventSlugs(): string[] {
-  return (eventsData as Event[]).map((event) => event.slug);
+  content?: string;
 }
 
 /**
@@ -49,10 +20,10 @@ export function getAllEventSlugs(): string[] {
  */
 export function formatDate(dateString: string): string {
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   }).format(date);
 }
 
@@ -74,7 +45,7 @@ export function isEventOngoing(startDate: string, endDate: string): boolean {
   const start = new Date(startDate);
   const end = new Date(endDate);
   end.setHours(23, 59, 59, 999); // Set to end of day
-  
+
   return now >= start && now <= end;
 }
 
@@ -92,11 +63,11 @@ export function isEventUpcoming(startDate: string): boolean {
  */
 export function formatEventPrice(price: number | undefined): string {
   if (price === undefined || price === 0) {
-    return 'Gratis';
+    return "Gratis";
   }
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(price);
