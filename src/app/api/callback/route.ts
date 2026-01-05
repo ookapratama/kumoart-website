@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const response = await fetch(
+    const tokenResponse = await fetch(
       "https://github.com/login/oauth/access_token",
       {
         method: "POST",
@@ -25,29 +25,32 @@ export async function GET(request: Request) {
       }
     );
 
-    const data = await response.json();
+    const data = await tokenResponse.json();
 
     if (data.error) {
+      console.error("GitHub OAuth Error:", data);
       return NextResponse.json(data, { status: 400 });
     }
 
-    // Decap CMS expects a postMessage with the authorization data
+    const responseData = {
+      token: data.access_token,
+      provider: "github",
+    };
+
     const script = `
-      <script>
-        (function() {
-          function recieveMessage(e) {
-            console.log("Recieved message:", e.data);
-            if (e.data !== "authorizing:github") return;
-            
-            window.opener.postMessage(
-              'authorization:github:success:${JSON.stringify(data)}',
-              e.origin
-            );
-          }
-          window.addEventListener("message", recieveMessage, false);
-          window.opener.postMessage("authorizing:github", "*");
-        })()
-      </script>
+      <!DOCTYPE html>
+      <html>
+      <body>
+        <script>
+          (function() {
+            const responseData = ${JSON.stringify(responseData)};
+            const message = "authorization:github:success:" + JSON.stringify(responseData);
+            window.opener.postMessage("authorizing:github", "*");
+            window.opener.postMessage(message, window.opener.location.origin);
+          })();
+        </script>
+      </body>
+      </html>
     `;
 
     return new NextResponse(script, {
