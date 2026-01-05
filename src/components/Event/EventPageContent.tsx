@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import EventList from "@/components/Event/EventList";
+import Pagination from "@/components/Common/Pagination";
 import { Event } from "@/lib/events";
 import { config } from "@/lib/config";
 import { useLanguage } from "@/lib/language";
@@ -11,11 +13,30 @@ interface EventPageContentProps {
   inactiveEvents: Event[];
 }
 
+const ITEMS_PER_PAGE = 6;
+
 export default function EventPageContent({
   activeEvents,
   inactiveEvents,
 }: EventPageContentProps) {
+  const [currentPage, setCurrentPage] = useState(1);
   const { t, language } = useLanguage();
+
+  const totalPages = Math.ceil(inactiveEvents.length / ITEMS_PER_PAGE);
+
+  const paginatedInactiveEvents = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return inactiveEvents.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [inactiveEvents, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to the past events section
+    const pastEventsSection = document.getElementById("past-events-heading");
+    if (pastEventsSection) {
+      pastEventsSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="py-12 bg-gray-50 min-h-screen">
@@ -62,7 +83,7 @@ export default function EventPageContent({
         </section>
 
         {inactiveEvents.length > 0 && (
-          <section aria-labelledby="past-events-heading">
+          <section aria-labelledby="past-events-heading" className="mt-16">
             <h2
               id="past-events-heading"
               className="text-xl md:text-2xl font-black text-gray-900 mb-6 tracking-tight"
@@ -70,8 +91,14 @@ export default function EventPageContent({
               {t("events.finished")}
             </h2>
             <div className="opacity-60">
-              <EventList events={inactiveEvents} />
+              <EventList events={paginatedInactiveEvents} />
             </div>
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </section>
         )}
 
