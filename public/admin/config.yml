@@ -1,14 +1,9 @@
-# Decap CMS Configuration for Kumo Art Craft
-# Docs: https://decapcms.org/docs/configuration-options/
-
 backend:
   name: github
   repo: ookapratama/kumoart-website
   branch: main
-  # base_url dikosongkan agar mengikuti domain tempat CMS dijalankan
   client_id: Ov23liKhiAwxBVl4rkNz
 
-# Lokasi penyimpanan media/gambar
 media_folder: public/images/uploads
 public_folder: /images/uploads
 

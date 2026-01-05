@@ -20,36 +20,7 @@
     <!-- Decap CMS Root -->
     <div id="nc-root"></div>
 
-    <script>
-      // Manual init to allow dynamic configuration
-      window.CMS_MANUAL_INIT = true;
-    </script>
-
     <!-- Decap CMS Script -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
-    <script>
-      // Wait for DOM and Script
-      window.onload = function () {
-        if (window.CMS) {
-          const isLocal =
-            window.location.hostname === "localhost" ||
-            window.location.hostname === "127.0.0.1";
-          const currentOrigin = window.location.origin;
-
-          window.CMS.init({
-            config: {
-              // Enable local backend only on localhost
-              local_backend: isLocal,
-              backend: {
-                // Point to our Next.js OAuth routes
-                base_url: currentOrigin,
-                auth_endpoint: "api/auth",
-              },
-            },
-          });
-        }
-      };
-    </script>
   </body>
 </html>
