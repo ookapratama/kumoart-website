@@ -3,6 +3,7 @@ backend:
   repo: ookapratama/kumoart-website
   branch: main
   client_id: Ov23liKhiAwxBVl4rkNz
+  base_url: https://api.decapcms.org
 
 media_folder: public/images/uploads
 public_folder: /images/uploads
