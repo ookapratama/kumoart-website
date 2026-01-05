@@ -6,8 +6,7 @@ backend:
   repo: ookapratama/kumoart-website
   branch: main
   # base_url dikosongkan agar mengikuti domain tempat CMS dijalankan
-  base_url: ""
-  auth_endpoint: /api/auth
+  client_id: Ov23liKhiAwxBVl4rkNz
 
 # Lokasi penyimpanan media/gambar
 media_folder: public/images/uploads
