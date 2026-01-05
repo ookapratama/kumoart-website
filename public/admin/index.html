@@ -32,13 +32,17 @@
       // Wait for DOM and Script
       window.onload = function () {
         if (window.CMS) {
-          // Detect current origin for OAuth
+          const isLocal =
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1";
           const currentOrigin = window.location.origin;
 
           window.CMS.init({
             config: {
+              // Enable local backend only on localhost
+              local_backend: isLocal,
               backend: {
-                // This forces the CMS to use your Next.js API routes instead of Netlify
+                // Point to our Next.js OAuth routes
                 base_url: currentOrigin,
                 auth_endpoint: "api/auth",
               },

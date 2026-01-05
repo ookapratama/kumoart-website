@@ -9,8 +9,6 @@ backend:
   base_url: ""
   auth_endpoint: /api/auth
 
-local_backend: true
-
 # Lokasi penyimpanan media/gambar
 media_folder: public/images/uploads
 public_folder: /images/uploads

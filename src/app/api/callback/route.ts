@@ -34,6 +34,12 @@ export async function GET(request: Request) {
       return NextResponse.json(data, { status: 400 });
     }
 
+    // Prepare message for Decap CMS
+    const responseData = {
+      token: data.access_token,
+      provider: "github",
+    };
+
     // Return a script that sends the token back to the CMS window
     const content = `
       <!DOCTYPE html>
@@ -42,13 +48,16 @@ export async function GET(request: Request) {
           <script>
             (function() {
               function receiveMessage(e) {
-                console.log("Receive message:", e);
+                console.log("Sending token to origin:", e.origin);
                 window.opener.postMessage(
-                  'authorization:github:success:${JSON.stringify(data)}',
+                  'authorization:github:success:${JSON.stringify(
+                    responseData
+                  )}',
                   e.origin
                 );
               }
               window.addEventListener("message", receiveMessage, false);
+              // Tell the opener that we are ready
               window.opener.postMessage("authorizing:github", "*");
             })()
           </script>
