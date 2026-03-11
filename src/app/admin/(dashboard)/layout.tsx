@@ -1,4 +1,4 @@
-import "./admin.css";
+import "../admin.css";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
