@@ -1,4 +1,4 @@
-import { getEventById } from "@/lib/events";
+import { getEventById } from "@/lib/events.server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";

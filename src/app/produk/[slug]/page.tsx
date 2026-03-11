@@ -4,7 +4,8 @@ import Link from "next/link";
 import ProductDetail from "@/components/Product/ProductDetail";
 import ProductList from "@/components/Product/ProductList";
 import Breadcrumbs from "@/components/UI/Breadcrumbs";
-import { formatPrice, getProductBySlug, getAllProducts } from "@/lib/products";
+import { formatPrice } from "@/lib/products";
+import { getProductBySlug, getAllProducts } from "@/lib/products.server";
 import { config } from "@/lib/config";
 import { translations } from "@/lib/translations";
 

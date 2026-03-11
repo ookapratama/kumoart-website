@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import EventDetail from "@/components/Event/EventDetail";
 import Breadcrumbs from "@/components/UI/Breadcrumbs";
-import { formatDateRange, getEventBySlug, getAllEvents } from "@/lib/events";
+import { formatDateRange } from "@/lib/events";
+import { getEventBySlug, getAllEvents } from "@/lib/events.server";
 import { config } from "@/lib/config";
 import { translations } from "@/lib/translations";
 

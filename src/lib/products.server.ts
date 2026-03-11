@@ -1,29 +1,106 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+import { createClient } from "@/lib/supabase/server";
 import { Product } from "./products";
 
-const productsDirectory = path.join(process.cwd(), "content/products");
+/**
+ * Ambil semua produk aktif (untuk public site)
+ */
+export async function getAllProducts(): Promise<Product[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
 
-export function getAllProductsServer(): Product[] {
-  if (!fs.existsSync(productsDirectory)) return [];
-
-  const fileNames = fs.readdirSync(productsDirectory);
-  return fileNames
-    .filter((fileName) => fileName.endsWith(".md"))
-    .map((fileName) => {
-      const fullPath = path.join(productsDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, "utf8");
-      const { data, content } = matter(fileContents);
-      return { ...data, content } as Product;
-    })
-    .filter((p) => p.isActive);
+  if (error) {
+    console.error("Error fetching products:", error.message);
+    return [];
+  }
+  return data ?? [];
 }
 
-export function getProductBySlugServer(slug: string): Product | undefined {
-  return getAllProductsServer().find((p) => p.slug === slug);
+/**
+ * Ambil semua produk (untuk admin, termasuk non-aktif)
+ */
+export async function getAllProductsAdmin(): Promise<Product[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching products (admin):", error.message);
+    return [];
+  }
+  return data ?? [];
 }
 
-export function getAllProductSlugsServer(): string[] {
-  return getAllProductsServer().map((p) => p.slug);
+/**
+ * Ambil produk berdasarkan slug
+ */
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error("Error fetching product by slug:", error.message);
+    return null;
+  }
+  return data;
+}
+
+/**
+ * Ambil produk berdasarkan ID (untuk admin edit)
+ */
+export async function getProductById(id: string): Promise<Product | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching product by id:", error.message);
+    return null;
+  }
+  return data;
+}
+
+/**
+ * Ambil produk featured
+ */
+export async function getFeaturedProducts(): Promise<Product[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("is_active", true)
+    .eq("is_featured", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching featured products:", error.message);
+    return [];
+  }
+  return data ?? [];
+}
+
+/**
+ * Ambil semua slug produk (untuk generateStaticParams)
+ */
+export async function getAllProductSlugs(): Promise<string[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("slug")
+    .eq("is_active", true);
+
+  if (error) return [];
+  return (data ?? []).map((p) => p.slug);
 }

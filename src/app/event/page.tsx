@@ -1,5 +1,5 @@
 import EventPageContent from "@/components/Event/EventPageContent";
-import { getAllEvents } from "@/lib/events";
+import { getAllEvents } from "@/lib/events.server";
 
 export default async function EventPage() {
   const allEvents = await getAllEvents();
