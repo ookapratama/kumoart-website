@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createStaticClient } from "@/lib/supabase/server";
 import { Event } from "./events";
 
 /**
@@ -90,7 +90,7 @@ export async function getActiveEvents(): Promise<Event[]> {
  * Ambil semua slug event (untuk generateStaticParams)
  */
 export async function getAllEventSlugs(): Promise<string[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data, error } = await supabase.from("events").select("slug");
   if (error) return [];
   return (data ?? []).map((e) => e.slug);

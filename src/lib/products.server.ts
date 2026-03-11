@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createStaticClient } from "@/lib/supabase/server";
 import { Product } from "./products";
 
 /**
@@ -95,7 +95,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
  * Ambil semua slug produk (untuk generateStaticParams)
  */
 export async function getAllProductSlugs(): Promise<string[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data, error } = await supabase
     .from("products")
     .select("slug")

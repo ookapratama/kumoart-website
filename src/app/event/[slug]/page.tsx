@@ -4,7 +4,7 @@ import Link from "next/link";
 import EventDetail from "@/components/Event/EventDetail";
 import Breadcrumbs from "@/components/UI/Breadcrumbs";
 import { formatDateRange } from "@/lib/events";
-import { getEventBySlug, getAllEvents } from "@/lib/events.server";
+import { getEventBySlug, getAllEventSlugs } from "@/lib/events.server";
 import { config } from "@/lib/config";
 import { translations } from "@/lib/translations";
 
@@ -16,9 +16,9 @@ interface Props {
 
 // Generate static paths for SSG
 export async function generateStaticParams() {
-  const events = await getAllEvents();
-  return events.map((event) => ({
-    slug: event.slug,
+  const slugs = await getAllEventSlugs();
+  return slugs.map((slug) => ({
+    slug,
   }));
 }
 
