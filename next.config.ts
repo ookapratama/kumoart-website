@@ -9,20 +9,6 @@ const nextConfig: NextConfig = {
 
   // Trailing slash for static hosting compatibility
   trailingSlash: true,
-
-  // Handle /admin route for Decap CMS
-  async rewrites() {
-    return [
-      {
-        source: "/admin",
-        destination: "/admin/index.html",
-      },
-      {
-        source: "/admin/",
-        destination: "/admin/index.html",
-      },
-    ];
-  },
 };
 
 export default nextConfig;

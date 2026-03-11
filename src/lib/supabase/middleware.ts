@@ -31,7 +31,9 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
-  const isLoginPage = request.nextUrl.pathname === "/admin/login";
+  const isLoginPage =
+    request.nextUrl.pathname === "/admin/login" ||
+    request.nextUrl.pathname === "/admin/login/";
 
   // Redirect ke login jika belum auth dan akses /admin/*
   if (isAdminRoute && !isLoginPage && !user) {
