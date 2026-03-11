@@ -105,35 +105,52 @@ CREATE TRIGGER update_events_updated_at
 
 -- -------------------------------------------------------
 -- SUPABASE STORAGE BUCKETS
--- Buat manual di Storage > New Bucket, atau jalankan ini:
+-- Jalankan script ini di Supabase SQL Editor
 -- -------------------------------------------------------
--- INSERT INTO storage.buckets (id, name, public)
--- VALUES ('product-images', 'product-images', true);
 
--- INSERT INTO storage.buckets (id, name, public)
--- VALUES ('event-images', 'event-images', true);
+-- 1. Buat bucket jika belum ada (lewat dashboard lebih disarankan)
+-- Pastikan 'Public' diaktifkan di seting bucket di dashboard Supabase
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('product-images', 'product-images', true)
+ON CONFLICT (id) DO NOTHING;
 
--- Storage policies (public read, authenticated write)
--- CREATE POLICY "Public read product images"
---   ON storage.objects FOR SELECT
---   USING (bucket_id = 'product-images');
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('event-images', 'event-images', true)
+ON CONFLICT (id) DO NOTHING;
 
--- CREATE POLICY "Admin upload product images"
---   ON storage.objects FOR INSERT
---   WITH CHECK (bucket_id = 'product-images' AND auth.role() = 'authenticated');
+-- 2. Storage policies (Hapus policy lama jika error saat menjalankan ulang)
+-- Hapus policy jika ingin reset: DROP POLICY IF EXISTS "..." ON storage.objects;
 
--- CREATE POLICY "Admin delete product images"
---   ON storage.objects FOR DELETE
---   USING (bucket_id = 'product-images' AND auth.role() = 'authenticated');
+-- Policy untuk product-images
+CREATE POLICY "Public read product images"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'product-images');
 
--- CREATE POLICY "Public read event images"
---   ON storage.objects FOR SELECT
---   USING (bucket_id = 'event-images');
+CREATE POLICY "Admin upload product images"
+  ON storage.objects FOR INSERT
+  WITH CHECK (bucket_id = 'product-images' AND auth.role() = 'authenticated');
 
--- CREATE POLICY "Admin upload event images"
---   ON storage.objects FOR INSERT
---   WITH CHECK (bucket_id = 'event-images' AND auth.role() = 'authenticated');
+CREATE POLICY "Admin update product images"
+  ON storage.objects FOR UPDATE
+  WITH CHECK (bucket_id = 'product-images' AND auth.role() = 'authenticated');
 
--- CREATE POLICY "Admin delete event images"
---   ON storage.objects FOR DELETE
---   USING (bucket_id = 'event-images' AND auth.role() = 'authenticated');
+CREATE POLICY "Admin delete product images"
+  ON storage.objects FOR DELETE
+  USING (bucket_id = 'product-images' AND auth.role() = 'authenticated');
+
+-- Policy untuk event-images
+CREATE POLICY "Public read event images"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'event-images');
+
+CREATE POLICY "Admin upload event images"
+  ON storage.objects FOR INSERT
+  WITH CHECK (bucket_id = 'event-images' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Admin update event images"
+  ON storage.objects FOR UPDATE
+  WITH CHECK (bucket_id = 'event-images' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Admin delete event images"
+  ON storage.objects FOR DELETE
+  USING (bucket_id = 'event-images' AND auth.role() = 'authenticated');

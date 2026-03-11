@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import ThemeToggle from "./ThemeToggle";
 
-export default function AdminHeader({ user }: { user: User }) {
+interface AdminHeaderProps {
+  user: User;
+  onMenuToggle: () => void;
+}
+
+export default function AdminHeader({ user, onMenuToggle }: AdminHeaderProps) {
   const router = useRouter();
   const supabase = createClient();
 
@@ -18,7 +23,10 @@ export default function AdminHeader({ user }: { user: User }) {
   return (
     <header className="admin-header">
       <div className="admin-header-left">
-        {/* Mobile: Kumoart Title */}
+        {/* Mobile Toggle */}
+        <button className="mobile-menu-btn" onClick={onMenuToggle}>
+          ☰
+        </button>
         <span className="admin-header-title">Admin Panel</span>
       </div>
       <div className="admin-header-right">

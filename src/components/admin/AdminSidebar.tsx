@@ -9,18 +9,28 @@ const navItems = [
   { href: "/admin/event", label: "Event", icon: "📅", exact: false },
 ];
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="admin-sidebar">
+    <aside className={`admin-sidebar ${isOpen ? "open" : ""}`}>
       {/* Brand */}
       <div className="sidebar-brand">
-        <span className="sidebar-brand-icon">🧶</span>
-        <div>
-          <div className="sidebar-brand-name">Kumoart</div>
-          <div className="sidebar-brand-label">Admin Panel</div>
+        <div className="flex items-center gap-2">
+          <span className="sidebar-brand-icon">🧶</span>
+          <div>
+            <div className="sidebar-brand-name">Kumoart</div>
+            <div className="sidebar-brand-label">Admin Panel</div>
+          </div>
         </div>
+        <button className="sidebar-close-btn" onClick={onClose}>
+          ✕
+        </button>
       </div>
 
       {/* Navigation */}
@@ -35,6 +45,7 @@ export default function AdminSidebar() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={onClose}
                 className={`sidebar-nav-item ${isActive ? "active" : ""}`}
               >
                 <span className="sidebar-nav-icon">{item.icon}</span>

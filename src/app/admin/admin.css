@@ -1465,3 +1465,116 @@
   border-radius: var(--admin-radius-sm);
   background: var(--admin-danger-light);
 }
+
+/* ================================================================
+   RESPONSIVENESS & MOBILE OPTIMIZATION
+   ================================================================ */
+
+.mobile-menu-btn,
+.sidebar-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--admin-text);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --admin-sidebar-w: 0px;
+  }
+
+  .admin-sidebar {
+    left: -280px;
+    width: 280px;
+    transition: left 0.3s ease;
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+  }
+
+  .admin-sidebar.open {
+    left: 0;
+  }
+
+  .admin-main {
+    margin-left: 0;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+    margin-right: 12px;
+  }
+
+  .sidebar-close-btn {
+    display: block;
+  }
+
+  .sidebar-brand {
+    justify-content: space-between;
+  }
+
+  .admin-content {
+    padding: 20px 16px;
+  }
+
+  .admin-header {
+    padding: 0 16px;
+  }
+
+  /* Responsive Grid */
+  .stat-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .recent-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Tables to Scrolls */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Forms */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Fix untuk Header User di Mobile */
+@media (max-width: 640px) {
+  .admin-header-user span {
+    display: none;
+  }
+
+  .admin-header-right {
+    gap: 8px;
+  }
+
+  .header-divider {
+    margin: 0 4px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+import AdminLayoutWrapper from "@/components/admin/AdminLayoutWrapper";
+
 export default async function AdminLayout({
   children,
 }: {
@@ -25,7 +27,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="admin-layout">
+    <>
       <script
         dangerouslySetInnerHTML={{
           __html: `
@@ -36,11 +38,7 @@ export default async function AdminLayout({
           `,
         }}
       />
-      <AdminSidebar />
-      <div className="admin-main">
-        <AdminHeader user={user} />
-        <main className="admin-content">{children}</main>
-      </div>
-    </div>
+      <AdminLayoutWrapper user={user}>{children}</AdminLayoutWrapper>
+    </>
   );
 }
