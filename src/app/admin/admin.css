@@ -3,8 +3,8 @@
    Tema: Dark Purple — Premium, modern, minimal
    ================================================================= */
 
-/* -- Variables -- */
 :root {
+  /* Default: Dark Purple (Original) */
   --admin-bg: #0f0f17;
   --admin-surface: #16161f;
   --admin-surface-2: #1c1c28;
@@ -22,12 +22,36 @@
   --admin-success-light: rgba(34, 197, 94, 0.1);
   --admin-amber: #f59e0b;
   --admin-amber-light: rgba(245, 158, 11, 0.12);
+
+  /* Layout Constants */
   --admin-sidebar-w: 240px;
-  --admin-header-h: 60px;
+  --admin-header-h: 64px;
   --admin-radius: 12px;
   --admin-radius-sm: 8px;
   --admin-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   --admin-font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+[data-theme="light"] {
+  --admin-bg: #f8fafc;
+  --admin-surface: #ffffff;
+  --admin-surface-2: #f1f5f9;
+  --admin-border: #e2e8f0;
+  --admin-border-hover: #cbd5e1;
+  --admin-text: #0f172a;
+  --admin-text-muted: #64748b;
+  --admin-text-faint: #94a3b8;
+  --admin-primary: #7c3aed;
+  --admin-primary-hover: #6d28d9;
+  --admin-primary-light: rgba(124, 58, 237, 0.1);
+  --admin-danger: #dc2626;
+  --admin-danger-light: rgba(220, 38, 38, 0.1);
+  --admin-success: #16a34a;
+  --admin-success-light: rgba(22, 163, 74, 0.1);
+  --admin-amber: #d97706;
+  --admin-amber-light: rgba(217, 119, 6, 0.1);
+  --admin-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 /* -- Reset khusus admin -- */
@@ -233,6 +257,13 @@
   color: var(--admin-text-muted);
 }
 
+.header-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--admin-border);
+  margin: 0 8px;
+}
+
 .btn-logout {
   padding: 6px 14px;
   border-radius: var(--admin-radius-sm);
@@ -248,6 +279,28 @@
 .btn-logout:hover {
   background: var(--admin-danger);
   color: white;
+}
+
+/* -- Theme Toggle -- */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-surface-2);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 18px;
+}
+
+.theme-toggle:hover {
+  border-color: var(--admin-primary);
+  background: var(--admin-primary-light);
+  transform: rotate(15deg);
 }
 
 /* ================================================================

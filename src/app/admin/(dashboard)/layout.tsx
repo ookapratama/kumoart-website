@@ -26,6 +26,16 @@ export default async function AdminLayout({
 
   return (
     <div className="admin-layout">
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              const theme = localStorage.getItem('admin-theme') || 'dark';
+              document.documentElement.setAttribute('data-theme', theme);
+            })()
+          `,
+        }}
+      />
       <AdminSidebar />
       <div className="admin-main">
         <AdminHeader user={user} />

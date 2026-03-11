@@ -1,6 +1,7 @@
 import "../admin.css";
 import type { Metadata } from "next";
 import LoginForm from "@/components/admin/LoginForm";
+import ThemeToggle from "@/components/admin/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "Login Admin — Kumoart",
@@ -10,7 +11,22 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div className="login-page">
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              const theme = localStorage.getItem('admin-theme') || 'dark';
+              document.documentElement.setAttribute('data-theme', theme);
+            })()
+          `,
+        }}
+      />
       <div className="login-bg-pattern" />
+      <div
+        style={{ position: "absolute", top: "24px", right: "24px", zIndex: 10 }}
+      >
+        <ThemeToggle />
+      </div>
       <div className="login-container">
         {/* Brand */}
         <div className="login-brand">
