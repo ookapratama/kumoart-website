@@ -1,9 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Layout/Navbar";
-import Footer from "@/components/Layout/Footer";
-import FloatingWhatsApp from "@/components/CTA/FloatingWhatsApp";
 import { config } from "@/lib/config";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -124,16 +121,11 @@ export const metadata: Metadata = {
   category: "shopping",
 };
 
-import { LanguageProvider } from "@/lib/language";
-import { getActiveEvents } from "@/lib/events.server";
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const activeEvents = await getActiveEvents();
-
   return (
     <html lang="id" suppressHydrationWarning>
       <head>
@@ -162,15 +154,8 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased bg-gray-50`}>
-        <LanguageProvider>
-          <div className="flex flex-col min-h-screen">
-            <Navbar activeEvents={activeEvents} />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
-          <FloatingWhatsApp />
-          <Analytics />
-        </LanguageProvider>
+        {children}
+        <Analytics />
       </body>
     </html>
   );

@@ -57,7 +57,7 @@ export default async function AdminProdukPage() {
               <tbody>
                 {products.map((product) => (
                   <tr key={product.id}>
-                    <td>
+                    <td data-label="Gambar">
                       <div className="table-img">
                         {product.image_url ? (
                           // eslint-disable-next-line @next/next/no-img-element
@@ -71,36 +71,38 @@ export default async function AdminProdukPage() {
                         )}
                       </div>
                     </td>
-                    <td>
+                    <td data-label="Nama Produk">
                       <div className="table-name">{product.name}</div>
                       <div className="table-slug">/{product.slug}</div>
                     </td>
-                    <td>
+                    <td data-label="Kategori">
                       <span className="tag">{product.category ?? "—"}</span>
                     </td>
-                    <td className="table-price">
+                    <td data-label="Harga" className="table-price">
                       {new Intl.NumberFormat("id-ID", {
                         style: "currency",
                         currency: "IDR",
                         minimumFractionDigits: 0,
                       }).format(product.price)}
                     </td>
-                    <td className="table-center">{product.stock}</td>
-                    <td>
+                    <td data-label="Stok" className="table-center">
+                      {product.stock}
+                    </td>
+                    <td data-label="Status">
                       <span
                         className={`badge ${product.is_active ? "badge-green" : "badge-gray"}`}
                       >
                         {product.is_active ? "Aktif" : "Nonaktif"}
                       </span>
                     </td>
-                    <td className="table-center">
+                    <td data-label="Featured" className="table-center">
                       <span
                         className={`badge ${product.is_featured ? "badge-amber" : "badge-gray"}`}
                       >
                         {product.is_featured ? "⭐ Ya" : "—"}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="Aksi">
                       <ProductActions
                         productId={product.id}
                         productName={product.name}

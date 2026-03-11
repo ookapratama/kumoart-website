@@ -55,7 +55,7 @@ export default async function AdminEventPage() {
               <tbody>
                 {events.map((event) => (
                   <tr key={event.id}>
-                    <td>
+                    <td data-label="Gambar">
                       <div className="table-img">
                         {event.image_url ? (
                           // eslint-disable-next-line @next/next/no-img-element
@@ -69,11 +69,11 @@ export default async function AdminEventPage() {
                         )}
                       </div>
                     </td>
-                    <td>
+                    <td data-label="Judul Event">
                       <div className="table-name">{event.title}</div>
                       <div className="table-slug">/{event.slug}</div>
                     </td>
-                    <td className="table-meta">
+                    <td data-label="Tanggal" className="table-meta">
                       <div>
                         {new Date(
                           event.start_date + "T00:00:00",
@@ -96,8 +96,8 @@ export default async function AdminEventPage() {
                         </div>
                       )}
                     </td>
-                    <td>{event.location ?? "—"}</td>
-                    <td className="table-price">
+                    <td data-label="Lokasi">{event.location ?? "—"}</td>
+                    <td data-label="Harga" className="table-price">
                       {event.price === 0
                         ? "Gratis"
                         : new Intl.NumberFormat("id-ID", {
@@ -106,15 +106,17 @@ export default async function AdminEventPage() {
                             minimumFractionDigits: 0,
                           }).format(event.price)}
                     </td>
-                    <td className="table-center">{event.quota ?? "∞"}</td>
-                    <td>
+                    <td data-label="Kuota" className="table-center">
+                      {event.quota ?? "∞"}
+                    </td>
+                    <td data-label="Status">
                       <span
                         className={`badge ${event.is_active ? "badge-green" : "badge-gray"}`}
                       >
                         {event.is_active ? "Aktif" : "Nonaktif"}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="Aksi">
                       <EventActions
                         eventId={event.id}
                         eventTitle={event.title}
