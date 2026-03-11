@@ -125,14 +125,14 @@ export const metadata: Metadata = {
 };
 
 import { LanguageProvider } from "@/lib/language";
-import { getActiveEventsServer } from "@/lib/events.server";
+import { getActiveEvents } from "@/lib/events.server";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const activeEvents = getActiveEventsServer();
+  const activeEvents = await getActiveEvents();
 
   return (
     <html lang="id" suppressHydrationWarning>
@@ -155,7 +155,7 @@ export default function RootLayout({
               priceRange: "Rp 25.000 - Rp 500.000",
               image: `${config.site.url}/images/og-image.jpg`,
               sameAs: [config.social.instagram, config.social.tiktok].filter(
-                Boolean
+                Boolean,
               ),
             }),
           }}
