@@ -1,10 +1,11 @@
 import EventPageContent from "@/components/Event/EventPageContent";
-import { getAllEventsServer, getActiveEventsServer } from "@/lib/events.server";
+import { getAllEvents } from "@/lib/events";
 
-export default function EventPage() {
-  const activeEvents = getActiveEventsServer();
-  const allEvents = getAllEventsServer();
-  const inactiveEvents = allEvents.filter((event) => !event.isActive);
+export default async function EventPage() {
+  const allEvents = await getAllEvents();
+
+  const activeEvents = allEvents.filter((event) => event.is_active);
+  const inactiveEvents = allEvents.filter((event) => !event.is_active);
 
   return (
     <EventPageContent

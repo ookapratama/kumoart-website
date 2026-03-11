@@ -1,8 +1,8 @@
 import ProductPageContent from "@/components/Product/ProductPageContent";
-import { getAllProductsServer } from "@/lib/products.server";
+import { getAllProducts } from "@/lib/products";
 
-export default function ProdukPage() {
-  const allProducts = getAllProductsServer();
+export default async function ProdukPage() {
+  const allProducts = await getAllProducts();
 
   return <ProductPageContent initialProducts={allProducts} />;
 }

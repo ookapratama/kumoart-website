@@ -1,11 +1,12 @@
 import HomePageContent from "@/components/Home/HomePageContent";
-import { getAllProductsServer } from "@/lib/products.server";
-import { getActiveEventsServer } from "@/lib/events.server";
+import { getFeaturedProducts } from "@/lib/products";
+import { getActiveEvents } from "@/lib/events";
 
-export default function HomePage() {
-  const allProducts = getAllProductsServer();
-  const featuredProducts = allProducts.filter((p) => p.isFeatured).slice(0, 6);
-  const activeEvents = getActiveEventsServer();
+export default async function HomePage() {
+  const [featuredProducts, activeEvents] = await Promise.all([
+    getFeaturedProducts(),
+    getActiveEvents(),
+  ]);
 
   return (
     <HomePageContent

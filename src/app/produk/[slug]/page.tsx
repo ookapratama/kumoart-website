@@ -4,12 +4,7 @@ import Link from "next/link";
 import ProductDetail from "@/components/Product/ProductDetail";
 import ProductList from "@/components/Product/ProductList";
 import Breadcrumbs from "@/components/UI/Breadcrumbs";
-import { formatPrice } from "@/lib/products";
-import {
-  getProductBySlugServer as getProductBySlug,
-  getAllProductSlugsServer as getAllProductSlugs,
-  getAllProductsServer as getAllProducts,
-} from "@/lib/products.server";
+import { formatPrice, getProductBySlug, getAllProducts } from "@/lib/products";
 import { config } from "@/lib/config";
 import { translations } from "@/lib/translations";
 
@@ -21,16 +16,16 @@ interface Props {
 
 // Generate static paths for SSG
 export async function generateStaticParams() {
-  const slugs = getAllProductSlugs();
-  return slugs.map((slug) => ({
-    slug,
+  const products = await getAllProducts();
+  return products.map((product) => ({
+    slug: product.slug,
   }));
 }
 
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     return {
@@ -39,9 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const title = `${product.name} - ${product.category}`;
-  const description = `${product.description} Harga: ${formatPrice(
-    product.price
+  const title = `${product.name} - ${product.category ?? ""}`;
+  const description = `${product.description ?? ""} Harga: ${formatPrice(
+    product.price,
   )}. Pesan langsung via WhatsApp!`;
   const productUrl = `${config.site.url}/produk/${product.slug}`;
 
@@ -52,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // Keywords spesifik produk
     keywords: [
       product.name.toLowerCase(),
-      product.category.toLowerCase(),
+      (product.category ?? "").toLowerCase(),
       "rajut",
       "handmade",
       "beli",
@@ -74,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: config.brand.fullName,
       images: [
         {
-          url: product.image,
+          url: product.image_url ?? "",
           width: 800,
           height: 600,
           alt: product.name,
@@ -87,22 +82,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: `${product.name} - ${formatPrice(product.price)}`,
-      description: product.description,
-      images: [product.image],
+      description: product.description ?? "",
+      images: [product.image_url ?? ""],
     },
   };
 }
 
 export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
   }
 
   // Get related products (same category, excluding current)
-  const allProducts = getAllProducts();
+  const allProducts = await getAllProducts();
   const relatedProducts = allProducts
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 3);
@@ -112,8 +107,8 @@ export default async function ProductDetailPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    description: product.description,
-    image: `${config.site.url}${product.image}`,
+    description: product.description ?? "",
+    image: `${config.site.url}${product.image_url ?? ""}`,
     brand: {
       "@type": "Brand",
       name: config.brand.name,
@@ -123,7 +118,7 @@ export default async function ProductDetailPage({ params }: Props) {
       price: product.price,
       priceCurrency: "IDR",
       availability:
-        product.stock > 0
+        (product.stock ?? 0) > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
       seller: {

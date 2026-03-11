@@ -39,8 +39,8 @@ export default function ProductPageContent({
       const matchesSearch =
         query === "" ||
         product.name.toLowerCase().includes(query) ||
-        product.description.toLowerCase().includes(query) ||
-        product.category.toLowerCase().includes(query);
+        (product.description ?? "").toLowerCase().includes(query) ||
+        (product.category ?? "").toLowerCase().includes(query);
 
       // 2. Category Filter
       const matchesCategory =
@@ -133,9 +133,9 @@ export default function ProductPageContent({
                   {language === "id" ? "Semua Kategori" : "All Categories"}
                 </option>
                 {categories
-                  .filter((c) => c !== "all")
+                  .filter((c) => c !== "all" && c !== null)
                   .map((cat) => (
-                    <option key={cat} value={cat}>
+                    <option key={cat ?? ""} value={cat ?? ""}>
                       {cat}
                     </option>
                   ))}

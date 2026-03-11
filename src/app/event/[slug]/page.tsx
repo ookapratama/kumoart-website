@@ -3,11 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import EventDetail from "@/components/Event/EventDetail";
 import Breadcrumbs from "@/components/UI/Breadcrumbs";
-import { formatDateRange } from "@/lib/events";
-import {
-  getEventBySlugServer as getEventBySlug,
-  getAllEventSlugsServer as getAllEventSlugs,
-} from "@/lib/events.server";
+import { formatDateRange, getEventBySlug, getAllEvents } from "@/lib/events";
 import { config } from "@/lib/config";
 import { translations } from "@/lib/translations";
 
@@ -19,16 +15,16 @@ interface Props {
 
 // Generate static paths for SSG
 export async function generateStaticParams() {
-  const slugs = getAllEventSlugs();
-  return slugs.map((slug) => ({
-    slug,
+  const events = await getAllEvents();
+  return events.map((event) => ({
+    slug: event.slug,
   }));
 }
 
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
+  const event = await getEventBySlug(slug);
 
   if (!event) {
     return {
@@ -37,9 +33,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const dateRange = formatDateRange(event.startDate, event.endDate);
+  const dateRange = formatDateRange(event.start_date, event.end_date);
   const title = event.title;
-  const description = `${event.description} Tanggal: ${dateRange}.${
+  const description = `${event.description ?? ""} Tanggal: ${dateRange}.${
     event.discount ? ` Diskon ${event.discount}%!` : ""
   } Info lebih lanjut via WhatsApp.`;
   const eventUrl = `${config.site.url}/event/${event.slug}`;
@@ -73,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: config.brand.fullName,
       images: [
         {
-          url: event.image,
+          url: event.image_url ?? "",
           width: 800,
           height: 600,
           alt: event.title,
@@ -86,15 +82,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: event.title,
-      description: event.description,
-      images: [event.image],
+      description: event.description ?? "",
+      images: [event.image_url ?? ""],
     },
   };
 }
 
 export default async function EventDetailPage({ params }: Props) {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
+  const event = await getEventBySlug(slug);
 
   if (!event) {
     notFound();
@@ -105,11 +101,11 @@ export default async function EventDetailPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "Event",
     name: event.title,
-    description: event.description,
-    image: `${config.site.url}${event.image}`,
-    startDate: event.startDate,
-    endDate: event.endDate,
-    eventStatus: event.isActive
+    description: event.description ?? "",
+    image: `${config.site.url}${event.image_url ?? ""}`,
+    startDate: event.start_date,
+    endDate: event.end_date,
+    eventStatus: event.is_active
       ? "https://schema.org/EventScheduled"
       : "https://schema.org/EventCancelled",
     eventAttendanceMode: event.location
@@ -136,7 +132,7 @@ export default async function EventDetailPage({ params }: Props) {
             "@type": "Offer",
             price: event.price,
             priceCurrency: "IDR",
-            availability: event.isActive
+            availability: event.is_active
               ? "https://schema.org/InStock"
               : "https://schema.org/SoldOut",
           }

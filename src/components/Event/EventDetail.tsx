@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import WhatsAppButton from '@/components/CTA/WhatsAppButton';
-import { Event, formatDateRange, formatEventPrice } from '@/lib/events';
-import { useLanguage } from '@/lib/language';
+import Image from "next/image";
+import WhatsAppButton from "@/components/CTA/WhatsAppButton";
+import { Event, formatDateRange, formatEventPrice } from "@/lib/events";
+import { useLanguage } from "@/lib/language";
 
 interface EventDetailProps {
   event: Event;
@@ -17,7 +17,7 @@ export default function EventDetail({ event }: EventDetailProps) {
       {/* Event Image */}
       <div className="relative h-64 md:h-80 bg-gray-50">
         <Image
-          src={event.image}
+          src={event.image_url ?? "/images/placeholder.jpg"}
           alt={event.title}
           fill
           className="object-cover"
@@ -26,21 +26,21 @@ export default function EventDetail({ event }: EventDetailProps) {
         />
         {/* Status Badge */}
         <div className="absolute top-4 left-4">
-          {event.isActive ? (
+          {event.is_active ? (
             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gray-900 text-white">
               <span className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span>
-              {t('events.ongoing')}
+              {t("events.ongoing")}
             </span>
           ) : (
             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gray-500 text-white">
-              {t('events.ended')}
+              {t("events.ended")}
             </span>
           )}
         </div>
         {/* Discount Badge */}
         {event.discount && (
           <span className="absolute top-4 right-4 bg-rose-600 text-white text-lg font-bold px-4 py-2 rounded-full shadow-lg">
-            🎉 {t('events.discount')} {event.discount}%
+            🎉 {t("events.discount")} {event.discount}%
           </span>
         )}
       </div>
@@ -64,7 +64,7 @@ export default function EventDetail({ event }: EventDetailProps) {
             />
           </svg>
           <time className="font-medium">
-            {formatDateRange(event.startDate, event.endDate)}
+            {formatDateRange(event.start_date, event.end_date)}
           </time>
         </div>
 
@@ -104,7 +104,7 @@ export default function EventDetail({ event }: EventDetailProps) {
               </svg>
               <div>
                 <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest block mb-0.5">
-                  {t('events.location')}
+                  {t("events.location")}
                 </span>
                 <p className="font-semibold text-gray-900">{event.location}</p>
               </div>
@@ -129,7 +129,7 @@ export default function EventDetail({ event }: EventDetailProps) {
               </svg>
               <div>
                 <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest block mb-0.5">
-                  {t('events.price')}
+                  {t("events.price")}
                 </span>
                 <p className="font-semibold text-gray-900">
                   {formatEventPrice(event.price)}
@@ -156,10 +156,10 @@ export default function EventDetail({ event }: EventDetailProps) {
               </svg>
               <div>
                 <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest block mb-0.5">
-                  {t('events.quota')}
+                  {t("events.quota")}
                 </span>
                 <p className="font-semibold text-gray-900">
-                  {event.quota} {t('events.participants')}
+                  {event.quota} {t("events.participants")}
                 </p>
               </div>
             </div>
@@ -169,11 +169,24 @@ export default function EventDetail({ event }: EventDetailProps) {
         {/* Terms & Conditions */}
         {event.terms && event.terms.length > 0 && (
           <section className="mb-8" aria-labelledby="terms-heading">
-            <h2 id="terms-heading" className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <svg className="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <h2
+              id="terms-heading"
+              className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"
+            >
+              <svg
+                className="w-5 h-5 text-rose-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
-              {t('events.terms')}
+              {t("events.terms")}
             </h2>
             <ul className="space-y-3">
               {event.terms.map((term, index) => (
@@ -190,10 +203,10 @@ export default function EventDetail({ event }: EventDetailProps) {
         )}
 
         {/* CTA */}
-        {event.isActive && (
+        {event.is_active && (
           <div className="border-t border-gray-100 pt-8 mt-4 text-center">
             <p className="text-gray-500 mb-6 max-w-md mx-auto">
-              {t('events.interested')}
+              {t("events.interested")}
             </p>
             <div className="flex justify-center">
               <WhatsAppButton
