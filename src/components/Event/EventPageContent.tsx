@@ -3,35 +3,33 @@
 import { useState, useMemo } from "react";
 import EventList from "@/components/Event/EventList";
 import Pagination from "@/components/Common/Pagination";
-import { Event } from "@/lib/events";
-import { config } from "@/lib/config";
 import { useLanguage } from "@/lib/language";
-import Link from "next/link";
+
+import type { Event } from "@/lib/events";
 
 interface EventPageContentProps {
-  activeEvents: Event[];
-  inactiveEvents: Event[];
+  currentEvents: Event[];
+  pastEvents: Event[];
 }
 
 const ITEMS_PER_PAGE = 6;
 
 export default function EventPageContent({
-  activeEvents,
-  inactiveEvents,
+  currentEvents,
+  pastEvents,
 }: EventPageContentProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
-  const totalPages = Math.ceil(inactiveEvents.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(pastEvents.length / ITEMS_PER_PAGE);
 
-  const paginatedInactiveEvents = useMemo(() => {
+  const paginatedPastEvents = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return inactiveEvents.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [inactiveEvents, currentPage]);
+    return pastEvents.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [pastEvents, currentPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to the past events section
     const pastEventsSection = document.getElementById("past-events-heading");
     if (pastEventsSection) {
       pastEventsSection.scrollIntoView({ behavior: "smooth" });
@@ -66,12 +64,12 @@ export default function EventPageContent({
                 className="w-2 h-2 bg-rose-500 rounded-full mr-2 animate-pulse"
                 aria-hidden="true"
               ></span>
-              {activeEvents.length} {t("nav.events")}
+              {currentEvents.length} {t("nav.events")}
             </span>
           </div>
 
-          {activeEvents.length > 0 ? (
-            <EventList events={activeEvents} />
+          {currentEvents.length > 0 ? (
+            <EventList events={currentEvents} />
           ) : (
             <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
               <span className="text-4xl mb-4 block" aria-hidden="true">
@@ -82,7 +80,7 @@ export default function EventPageContent({
           )}
         </section>
 
-        {inactiveEvents.length > 0 && (
+        {pastEvents.length > 0 && (
           <section aria-labelledby="past-events-heading" className="mt-16">
             <h2
               id="past-events-heading"
@@ -91,7 +89,7 @@ export default function EventPageContent({
               {t("events.finished")}
             </h2>
             <div className="opacity-60">
-              <EventList events={paginatedInactiveEvents} />
+              <EventList events={paginatedPastEvents} />
             </div>
 
             <Pagination
@@ -101,27 +99,6 @@ export default function EventPageContent({
             />
           </section>
         )}
-
-        <section className="mt-16 p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {language === "id"
-              ? `Tentang Event ${config.brand.name}`
-              : `About ${config.brand.name} Events`}
-          </h2>
-          <div className="prose prose-gray max-w-none text-gray-600">
-            {language === "id" ? (
-              <>
-                <p>Kami secara rutin mengadakan berbagai event menarik...</p>
-                {/* ... sisa konten SEO ... */}
-              </>
-            ) : (
-              <>
-                <p>We regularly organize various interesting events...</p>
-                {/* ... sisa konten SEO ... */}
-              </>
-            )}
-          </div>
-        </section>
       </div>
     </div>
   );

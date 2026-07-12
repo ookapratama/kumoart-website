@@ -1,18 +1,9 @@
-export interface Product {
-  id: string;
-  slug: string;
-  name: string;
-  description: string | null;
-  price: number;
-  category: string | null;
-  image_url: string | null;
-  is_featured: boolean;
-  is_active: boolean;
-  stock: number;
-  content: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import type { Tables } from "@/lib/supabase/database.types";
+
+export type Product = Tables<"products">;
+
+/** Maksimum gambar galeri tambahan per produk (di luar cover). */
+export const MAX_GALLERY_IMAGES = 5;
 
 /**
  * Format harga ke Rupiah

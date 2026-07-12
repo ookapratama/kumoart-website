@@ -1,33 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+type Theme = "dark" | "light";
+
+const listeners = new Set<() => void>();
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+function getThemeSnapshot(): Theme {
+  return localStorage.getItem("admin-theme") === "light" ? "light" : "dark";
+}
+
+function applyTheme(theme: Theme): void {
+  localStorage.setItem("admin-theme", theme);
+  document.documentElement.setAttribute("data-theme", theme);
+  listeners.forEach((listener) => listener());
+}
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<string>("dark");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem("admin-theme") || "dark";
-    setTheme(savedTheme);
-    document.documentElement.setAttribute("data-theme", savedTheme);
-  }, []);
+  const theme = useSyncExternalStore(subscribe, getThemeSnapshot, () => "dark");
 
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("admin-theme", newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
+    applyTheme(theme === "dark" ? "light" : "dark");
   };
-
-  // Avoid hydration mismatch by not rendering anything until mounted
-  if (!mounted) {
-    return (
-      <div className="theme-toggle" style={{ opacity: 0.5 }}>
-        🌙
-      </div>
-    );
-  }
 
   return (
     <button

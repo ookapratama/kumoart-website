@@ -1,27 +1,22 @@
-import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import DeleteAction from "@/components/admin/shared/delete-action";
+import { deleteEvent } from "@/lib/actions/events";
+import { getAllEventsAdmin } from "@/lib/events.server";
+import { formatEventPrice } from "@/lib/events";
+
 import type { Metadata } from "next";
-import EventActions from "@/components/admin/EventActions";
 
 export const metadata: Metadata = { title: "Manajemen Event — Admin Kumoart" };
 
 export default async function AdminEventPage() {
-  const supabase = await createClient();
-  const { data: events, error } = await supabase
-    .from("events")
-    .select("*")
-    .order("start_date", { ascending: false });
-
-  if (error) {
-    return <div className="error-state">Gagal memuat data event.</div>;
-  }
+  const events = await getAllEventsAdmin();
 
   return (
     <div className="list-page">
       <div className="page-header">
         <div>
           <h1 className="page-title">Event</h1>
-          <p className="page-subtitle">{events?.length ?? 0} event terdaftar</p>
+          <p className="page-subtitle">{events.length} event terdaftar</p>
         </div>
         <Link href="/admin/event/baru" className="btn-primary">
           + Tambah Event
@@ -29,7 +24,7 @@ export default async function AdminEventPage() {
       </div>
 
       <div className="table-card">
-        {!events || events.length === 0 ? (
+        {events.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">📅</div>
             <p>Belum ada event. Tambahkan event pertama!</p>
@@ -98,13 +93,7 @@ export default async function AdminEventPage() {
                     </td>
                     <td data-label="Lokasi">{event.location ?? "—"}</td>
                     <td data-label="Harga" className="table-price">
-                      {event.price === 0
-                        ? "Gratis"
-                        : new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            minimumFractionDigits: 0,
-                          }).format(event.price)}
+                      {formatEventPrice(event.price)}
                     </td>
                     <td data-label="Kuota" className="table-center">
                       {event.quota ?? "∞"}
@@ -117,9 +106,11 @@ export default async function AdminEventPage() {
                       </span>
                     </td>
                     <td data-label="Aksi">
-                      <EventActions
-                        eventId={event.id}
-                        eventTitle={event.title}
+                      <DeleteAction
+                        id={event.id}
+                        name={event.title}
+                        editHref={`/admin/event/${event.id}/edit`}
+                        action={deleteEvent}
                       />
                     </td>
                   </tr>

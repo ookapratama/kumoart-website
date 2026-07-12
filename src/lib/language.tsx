@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useSyncExternalStore, ReactNode } from 'react';
 import { translations, Language } from './translations';
 
 // Supported languages
@@ -16,32 +16,42 @@ interface LanguageContextType {
 // Create context
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+// Bahasa disimpan di localStorage; dibaca via useSyncExternalStore
+// agar SSR aman (server selalu 'id') tanpa setState di effect.
+const listeners = new Set<() => void>();
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+function getLanguageSnapshot(): Language {
+  try {
+    const saved = localStorage.getItem('kumoart-language');
+    return saved === 'en' ? 'en' : 'id';
+  } catch {
+    return 'id';
+  }
+}
+
 // Provider component
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('id');
-  const [mounted, setMounted] = useState(false);
-
-  // Load saved language from localStorage safely
-  useEffect(() => {
-    setMounted(true);
-    try {
-      const savedLang = localStorage.getItem('kumoart-language') as Language;
-      if (savedLang && (savedLang === 'id' || savedLang === 'en')) {
-        setLanguageState(savedLang);
-      }
-    } catch (e) {
-      console.error('Failed to load language from localStorage', e);
-    }
-  }, []);
+  const language = useSyncExternalStore(
+    subscribe,
+    getLanguageSnapshot,
+    () => 'id' as Language,
+  );
 
   // Save language to localStorage
   const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
     try {
       localStorage.setItem('kumoart-language', lang);
     } catch (e) {
       console.error('Failed to save language to localStorage', e);
     }
+    listeners.forEach((listener) => listener());
   };
 
   // Translation function

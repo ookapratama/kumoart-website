@@ -1,14 +1,26 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Image configuration
   images: {
-    // Untuk static export, gunakan unoptimized images
-    unoptimized: true,
+    // Gambar produk/event dihosting di Supabase Storage
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
   },
 
-  // Trailing slash for static hosting compatibility
+  // URL publik yang sudah beredar memakai trailing slash
   trailingSlash: true,
+
+  experimental: {
+    serverActions: {
+      // Upload gambar (hasil kompresi max ~800KB) lewat Server Action
+      bodySizeLimit: "2mb",
+    },
+  },
 };
 
 export default nextConfig;

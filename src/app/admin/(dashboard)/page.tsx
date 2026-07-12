@@ -1,6 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
-import type { Metadata } from "next";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { formatPrice } from "@/lib/products";
+
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Dashboard Admin — Kumoart",
@@ -9,15 +11,7 @@ export const metadata: Metadata = {
 async function getStats() {
   const supabase = await createClient();
 
-  const [
-    { count: totalProducts },
-    { count: activeProducts },
-    { count: featuredProducts },
-    { count: totalEvents },
-    { count: activeEvents },
-    { data: recentProducts },
-    { data: recentEvents },
-  ] = await Promise.all([
+  const results = await Promise.all([
     supabase.from("products").select("*", { count: "exact", head: true }),
     supabase
       .from("products")
@@ -44,14 +38,29 @@ async function getStats() {
       .limit(5),
   ]);
 
+  const failed = results.find((result) => result.error);
+  if (failed?.error) {
+    throw new Error(`Gagal memuat statistik dashboard: ${failed.error.message}`);
+  }
+
+  const [
+    totalProducts,
+    activeProducts,
+    featuredProducts,
+    totalEvents,
+    activeEvents,
+    recentProducts,
+    recentEvents,
+  ] = results;
+
   return {
-    totalProducts: totalProducts ?? 0,
-    activeProducts: activeProducts ?? 0,
-    featuredProducts: featuredProducts ?? 0,
-    totalEvents: totalEvents ?? 0,
-    activeEvents: activeEvents ?? 0,
-    recentProducts: recentProducts ?? [],
-    recentEvents: recentEvents ?? [],
+    totalProducts: totalProducts.count ?? 0,
+    activeProducts: activeProducts.count ?? 0,
+    featuredProducts: featuredProducts.count ?? 0,
+    totalEvents: totalEvents.count ?? 0,
+    activeEvents: activeEvents.count ?? 0,
+    recentProducts: recentProducts.data ?? [],
+    recentEvents: recentEvents.data ?? [],
   };
 }
 
@@ -137,15 +146,7 @@ export default async function AdminDashboard() {
             {stats.recentProducts.length === 0 ? (
               <p className="recent-empty">Belum ada produk</p>
             ) : (
-              stats.recentProducts.map(
-                (product: {
-                  id: string;
-                  name: string;
-                  category: string | null;
-                  price: number;
-                  is_active: boolean;
-                  created_at: string;
-                }) => (
+              stats.recentProducts.map((product) => (
                   <Link
                     key={product.id}
                     href={`/admin/produk/${product.id}/edit`}
@@ -159,11 +160,7 @@ export default async function AdminDashboard() {
                     </div>
                     <div className="recent-item-right">
                       <span className="recent-item-price">
-                        {new Intl.NumberFormat("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                          minimumFractionDigits: 0,
-                        }).format(product.price)}
+                        {formatPrice(product.price)}
                       </span>
                       <span
                         className={`badge ${product.is_active ? "badge-green" : "badge-gray"}`}
@@ -172,8 +169,7 @@ export default async function AdminDashboard() {
                       </span>
                     </div>
                   </Link>
-                ),
-              )
+              ))
             )}
           </div>
           <Link href="/admin/produk/baru" className="btn-add-new">
@@ -193,14 +189,7 @@ export default async function AdminDashboard() {
             {stats.recentEvents.length === 0 ? (
               <p className="recent-empty">Belum ada event</p>
             ) : (
-              stats.recentEvents.map(
-                (event: {
-                  id: string;
-                  title: string;
-                  start_date: string;
-                  is_active: boolean;
-                  created_at: string;
-                }) => (
+              stats.recentEvents.map((event) => (
                   <Link
                     key={event.id}
                     href={`/admin/event/${event.id}/edit`}
@@ -224,8 +213,7 @@ export default async function AdminDashboard() {
                       {event.is_active ? "Aktif" : "Nonaktif"}
                     </span>
                   </Link>
-                ),
-              )
+              ))
             )}
           </div>
           <Link href="/admin/event/baru" className="btn-add-new">

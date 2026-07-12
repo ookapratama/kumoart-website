@@ -2,15 +2,13 @@ import "../admin.css";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import AdminSidebar from "@/components/admin/AdminSidebar";
-import AdminHeader from "@/components/admin/AdminHeader";
+import AdminLayoutWrapper from "@/components/admin/AdminLayoutWrapper";
+import ThemeScript from "@/components/shared/theme-script";
 
 export const metadata: Metadata = {
   title: "Admin — Kumoart",
   robots: { index: false, follow: false },
 };
-
-import AdminLayoutWrapper from "@/components/admin/AdminLayoutWrapper";
 
 export default async function AdminLayout({
   children,
@@ -28,16 +26,7 @@ export default async function AdminLayout({
 
   return (
     <>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              const theme = localStorage.getItem('admin-theme') || 'dark';
-              document.documentElement.setAttribute('data-theme', theme);
-            })()
-          `,
-        }}
-      />
+      <ThemeScript />
       <AdminLayoutWrapper user={user}>{children}</AdminLayoutWrapper>
     </>
   );

@@ -19,6 +19,8 @@ interface Props {
   }>;
 }
 
+export const revalidate = 3600;
+
 // Generate static paths for SSG
 export async function generateStaticParams() {
   const slugs = await getAllProductSlugs();

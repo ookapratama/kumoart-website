@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,6 +17,11 @@ export default function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    const identifier = username.trim();
+    const email = identifier.includes("@")
+      ? identifier
+      : `${identifier.toLowerCase()}@gmail.com`;
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -43,18 +48,18 @@ export default function LoginForm() {
       )}
 
       <div className="form-group">
-        <label htmlFor="email" className="form-label">
-          Email
+        <label htmlFor="username" className="form-label">
+          Username
         </label>
         <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="admin@kumoart.id"
+          id="username"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="budi"
           className="form-input"
           required
-          autoComplete="email"
+          autoComplete="username"
           autoFocus
         />
       </div>

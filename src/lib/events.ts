@@ -1,21 +1,6 @@
-export interface Event {
-  id: string;
-  slug: string;
-  title: string;
-  description: string | null;
-  start_date: string;
-  end_date: string;
-  image_url: string | null;
-  is_active: boolean;
-  discount: number | null;
-  price: number;
-  location: string | null;
-  quota: number | null;
-  terms: string[];
-  content: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import type { Tables } from "@/lib/supabase/database.types";
+
+export type Event = Tables<"events">;
 
 /**
  * Format tanggal ke format Indonesia
@@ -35,25 +20,6 @@ export function formatDate(dateString: string): string {
 export function formatDateRange(startDate: string, endDate: string): string {
   if (startDate === endDate) return formatDate(startDate);
   return `${formatDate(startDate)} - ${formatDate(endDate)}`;
-}
-
-/**
- * Cek apakah event masih berlangsung
- */
-export function isEventOngoing(startDate: string, endDate: string): boolean {
-  const now = new Date();
-  const start = new Date(startDate + "T00:00:00");
-  const end = new Date(endDate + "T23:59:59");
-  return now >= start && now <= end;
-}
-
-/**
- * Cek apakah event akan datang
- */
-export function isEventUpcoming(startDate: string): boolean {
-  const now = new Date();
-  const start = new Date(startDate + "T00:00:00");
-  return now < start;
 }
 
 /**

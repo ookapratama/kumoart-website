@@ -1,11 +1,15 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import ProductSearch from "@/components/Product/ProductSearch";
 import ProductList from "@/components/Product/ProductList";
+import ProductFilterBar from "@/components/Product/product-filter-bar";
+import ProductCatalogSeo from "@/components/Product/product-catalog-seo";
 import Pagination from "@/components/Common/Pagination";
-import { Product, formatPrice } from "@/lib/products";
+import { useProductFilters } from "@/components/Product/use-product-filters";
 import { useLanguage } from "@/lib/language";
+
+import type { Product } from "@/lib/products";
 
 interface ProductPageContentProps {
   initialProducts: Product[];
@@ -16,60 +20,30 @@ const ITEMS_PER_PAGE = 12;
 export default function ProductPageContent({
   initialProducts,
 }: ProductPageContentProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [minPrice, setMinPrice] = useState<string>("");
-  const [maxPrice, setMaxPrice] = useState<string>("");
-  const [onlyInStock, setOnlyInStock] = useState(false);
+  const { t } = useLanguage();
 
-  const { t, language } = useLanguage();
+  const filters = useProductFilters(initialProducts);
+  const {
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    minPrice,
+    maxPrice,
+    onlyInStock,
+    filteredProducts,
+  } = filters;
 
-  // Get unique categories from all products
-  const categories = useMemo(() => {
-    const cats = initialProducts.map((p) => p.category);
-    return ["all", ...Array.from(new Set(cats))];
-  }, [initialProducts]);
-
-  // Combined Filter Logic
-  const filteredProducts = useMemo(() => {
-    return initialProducts.filter((product) => {
-      // 1. Search Query Filter
-      const query = searchQuery.toLowerCase().trim();
-      const matchesSearch =
-        query === "" ||
-        product.name.toLowerCase().includes(query) ||
-        (product.description ?? "").toLowerCase().includes(query) ||
-        (product.category ?? "").toLowerCase().includes(query);
-
-      // 2. Category Filter
-      const matchesCategory =
-        selectedCategory === "all" || product.category === selectedCategory;
-
-      // 3. Price Filter
-      const price = product.price;
-      const minP = minPrice === "" ? 0 : parseInt(minPrice);
-      const maxP = maxPrice === "" ? Infinity : parseInt(maxPrice);
-      const matchesPrice = price >= minP && price <= maxP;
-
-      // 4. Stock Filter (assuming stock field exists)
-      const matchesStock = !onlyInStock || (product.stock && product.stock > 0);
-
-      return matchesSearch && matchesCategory && matchesPrice && matchesStock;
-    });
-  }, [
+  // Halaman di-derive dari kombinasi filter: filter berubah → otomatis
+  // kembali ke halaman 1 (tanpa setState di effect).
+  const filterKey = [
     searchQuery,
     selectedCategory,
     minPrice,
     maxPrice,
     onlyInStock,
-    initialProducts,
-  ]);
-
-  // Reset to first page when any filter changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedCategory, minPrice, maxPrice, onlyInStock]);
+  ].join("|");
+  const [pageState, setPageState] = useState({ key: filterKey, page: 1 });
+  const currentPage = pageState.key === filterKey ? pageState.page : 1;
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
 
@@ -78,13 +52,13 @@ export default function ProductPageContent({
     return filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredProducts, currentPage]);
 
-  const handleSearch = useCallback((query: string) => {
-    setSearchQuery(query);
-  }, []);
+  const handleSearch = useCallback(
+    (query: string) => setSearchQuery(query),
+    [setSearchQuery],
+  );
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    // Smooth scroll with offset for filters
+    setPageState({ key: filterKey, page });
     const listElement = document.getElementById("product-list-start");
     if (listElement) {
       const offset = 100;
@@ -116,88 +90,7 @@ export default function ProductPageContent({
           />
         </div>
 
-        {/* Filter Bar */}
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-end gap-6">
-            {/* Category Filter */}
-            <div className="flex-1">
-              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 ml-1">
-                {language === "id" ? "Kategori" : "Category"}
-              </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm font-bold text-gray-700 outline-none ring-2 ring-transparent focus:ring-rose-500/20 transition-all cursor-pointer"
-              >
-                <option value="all">
-                  {language === "id" ? "Semua Kategori" : "All Categories"}
-                </option>
-                {categories
-                  .filter((c) => c !== "all" && c !== null)
-                  .map((cat) => (
-                    <option key={cat ?? ""} value={cat ?? ""}>
-                      {cat}
-                    </option>
-                  ))}
-              </select>
-            </div>
-
-            {/* Price Filter */}
-            <div className="flex-[2] flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 ml-1">
-                  {language === "id" ? "Harga Min (Rp)" : "Min Price (Rp)"}
-                </label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(e.target.value)}
-                  className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm font-bold text-gray-700 outline-none ring-2 ring-transparent focus:ring-rose-500/20 transition-all"
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 ml-1">
-                  {language === "id" ? "Harga Max (Rp)" : "Max Price (Rp)"}
-                </label>
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                  className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm font-bold text-gray-700 outline-none ring-2 ring-transparent focus:ring-rose-500/20 transition-all"
-                />
-              </div>
-            </div>
-
-            {/* In Stock Toggle */}
-            <div className="flex-none pb-1">
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <div className="relative">
-                  <input
-                    type="checkbox"
-                    checked={onlyInStock}
-                    onChange={(e) => setOnlyInStock(e.target.checked)}
-                    className="sr-only"
-                  />
-                  <div
-                    className={`w-12 h-6 rounded-full transition-colors ${
-                      onlyInStock ? "bg-rose-600" : "bg-gray-200"
-                    }`}
-                  ></div>
-                  <div
-                    className={`absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                      onlyInStock ? "translate-x-6" : ""
-                    }`}
-                  ></div>
-                </div>
-                <span className="text-sm font-bold text-gray-600 group-hover:text-rose-600 transition-colors">
-                  {language === "id" ? "Tersedia Saja" : "In Stock Only"}
-                </span>
-              </label>
-            </div>
-          </div>
-        </div>
+        <ProductFilterBar filters={filters} />
 
         <div
           id="product-list-start"
@@ -206,23 +99,9 @@ export default function ProductPageContent({
           aria-live="polite"
         >
           <div>
-            {searchQuery ||
-            selectedCategory !== "all" ||
-            minPrice ||
-            maxPrice ||
-            onlyInStock ? (
-              <>
-                {t("search.showing")}{" "}
-                <span className="text-rose-600">{filteredProducts.length}</span>{" "}
-                {t("search.products")}
-              </>
-            ) : (
-              <>
-                {t("search.showing")}{" "}
-                <span className="text-rose-600">{filteredProducts.length}</span>{" "}
-                {t("search.products")}
-              </>
-            )}
+            {t("search.showing")}{" "}
+            <span className="text-rose-600">{filteredProducts.length}</span>{" "}
+            {t("search.products")}
           </div>
         </div>
 
@@ -234,115 +113,7 @@ export default function ProductPageContent({
           onPageChange={handlePageChange}
         />
 
-        {/* SEO Content */}
-        <section className="mt-24 p-10 md:p-16 bg-white rounded-[3rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden relative">
-          <div className="absolute top-0 left-0 w-32 h-32 bg-rose-50 rounded-br-full -z-0"></div>
-          <div className="relative z-10">
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 border-l-8 border-rose-600 pl-6">
-              {language === "id"
-                ? "Kualitas Rajutan Kumoart"
-                : "Quality of Kumoart Crafts"}
-            </h2>
-            <div className="prose prose-rose prose-lg max-w-none text-gray-600 font-medium">
-              {language === "id" ? (
-                <>
-                  <p>
-                    Semua produk di <strong>Kumoart</strong> dibuat secara
-                    handmade...
-                  </p>
-                  <ul className="mt-8 grid md:grid-cols-2 gap-6 list-none pl-0">
-                    {[
-                      {
-                        icon: "👜",
-                        title: "Tas Rajut Macrame",
-                        desc: "Anyaman indah gaya Bohemian",
-                      },
-                      {
-                        icon: "🧸",
-                        title: "Boneka Amigurumi",
-                        desc: "Boneka rajut aman untuk anak",
-                      },
-                      {
-                        icon: "🧣",
-                        title: "Aksesoris Rajut",
-                        desc: "Syal, topi, dan gantungan kunci",
-                      },
-                      {
-                        icon: "🏠",
-                        title: "Home Decor",
-                        desc: "Sarung bantal dan coaster set",
-                      },
-                    ].map((item, id) => (
-                      <li
-                        key={item.title}
-                        className="bg-gray-50 p-6 rounded-2xl flex items-center gap-5 group hover:bg-rose-50 transition-colors"
-                      >
-                        <span className="text-4xl group-hover:scale-110 transition-transform">
-                          {item.icon}
-                        </span>
-                        <div>
-                          <strong className="block text-gray-900 text-lg">
-                            {item.title}
-                          </strong>
-                          <span className="text-sm text-gray-500 font-medium">
-                            {item.desc}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <>
-                  <p>
-                    All products at <strong>Kumoart</strong> are handmade...
-                  </p>
-                  <ul className="mt-8 grid md:grid-cols-2 gap-6 list-none pl-0">
-                    {[
-                      {
-                        icon: "👜",
-                        title: "Macrame Bags",
-                        desc: "Beautiful Bohemian styles",
-                      },
-                      {
-                        icon: "🧸",
-                        title: "Amigurumi Dolls",
-                        desc: "Safe for children",
-                      },
-                      {
-                        icon: "🧣",
-                        title: "Crochet Accessories",
-                        desc: "Scarves, hats, and keychains",
-                      },
-                      {
-                        icon: "🏠",
-                        title: "Home Decor",
-                        desc: "Pillowcases and coaster sets",
-                      },
-                    ].map((item, id) => (
-                      <li
-                        key={item.title}
-                        className="bg-gray-50 p-6 rounded-2xl flex items-center gap-5 group hover:bg-rose-50 transition-colors"
-                      >
-                        <span className="text-4xl group-hover:scale-110 transition-transform">
-                          {item.icon}
-                        </span>
-                        <div>
-                          <strong className="block text-gray-900 text-lg">
-                            {item.title}
-                          </strong>
-                          <span className="text-sm text-gray-500 font-medium">
-                            {item.desc}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-          </div>
-        </section>
+        <ProductCatalogSeo />
       </div>
     </div>
   );

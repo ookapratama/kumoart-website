@@ -91,7 +91,13 @@ export const translations: Record<Language, Record<string, string>> = {
     // Empty states
     'empty.no_events': 'Belum ada event aktif. Ikuti terus untuk update terbaru!',
     'empty.no_products': 'Produk tidak ditemukan.',
-    
+    'empty.products_hint': 'Coba ubah kata kunci pencarian Anda',
+    'empty.events_hint': 'Pantau terus untuk informasi event terbaru',
+
+    // Pagination
+    'pagination.previous': 'Sebelumnya',
+    'pagination.next': 'Selanjutnya',
+
     // Misc
     'misc.handmade_with_love': 'Handmade with love',
     'misc.benefits': 'Keunggulan Produk',
@@ -185,7 +191,13 @@ export const translations: Record<Language, Record<string, string>> = {
     // Empty states
     'empty.no_events': 'No active events at the moment. Stay tuned for updates!',
     'empty.no_products': 'No products found.',
-    
+    'empty.products_hint': 'Try changing your search keywords',
+    'empty.events_hint': 'Stay tuned for upcoming event announcements',
+
+    // Pagination
+    'pagination.previous': 'Previous',
+    'pagination.next': 'Next',
+
     // Misc
     'misc.handmade_with_love': 'Handmade with love',
     'misc.benefits': 'Product Benefits',

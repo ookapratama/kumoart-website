@@ -1,29 +1,22 @@
-import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import DeleteAction from "@/components/admin/shared/delete-action";
+import { deleteProduct } from "@/lib/actions/products";
+import { getAllProductsAdmin } from "@/lib/products.server";
+import { formatPrice } from "@/lib/products";
+
 import type { Metadata } from "next";
-import ProductActions from "@/components/admin/ProductActions";
 
 export const metadata: Metadata = { title: "Manajemen Produk — Admin Kumoart" };
 
 export default async function AdminProdukPage() {
-  const supabase = await createClient();
-  const { data: products, error } = await supabase
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    return <div className="error-state">Gagal memuat data produk.</div>;
-  }
+  const products = await getAllProductsAdmin();
 
   return (
     <div className="list-page">
       <div className="page-header">
         <div>
           <h1 className="page-title">Produk</h1>
-          <p className="page-subtitle">
-            {products?.length ?? 0} produk terdaftar
-          </p>
+          <p className="page-subtitle">{products.length} produk terdaftar</p>
         </div>
         <Link href="/admin/produk/baru" className="btn-primary">
           + Tambah Produk
@@ -31,7 +24,7 @@ export default async function AdminProdukPage() {
       </div>
 
       <div className="table-card">
-        {!products || products.length === 0 ? (
+        {products.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">🛍️</div>
             <p>Belum ada produk. Tambahkan produk pertama!</p>
@@ -79,11 +72,7 @@ export default async function AdminProdukPage() {
                       <span className="tag">{product.category ?? "—"}</span>
                     </td>
                     <td data-label="Harga" className="table-price">
-                      {new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                      }).format(product.price)}
+                      {formatPrice(product.price)}
                     </td>
                     <td data-label="Stok" className="table-center">
                       {product.stock}
@@ -103,9 +92,11 @@ export default async function AdminProdukPage() {
                       </span>
                     </td>
                     <td data-label="Aksi">
-                      <ProductActions
-                        productId={product.id}
-                        productName={product.name}
+                      <DeleteAction
+                        id={product.id}
+                        name={product.name}
+                        editHref={`/admin/produk/${product.id}/edit`}
+                        action={deleteProduct}
                       />
                     </td>
                   </tr>

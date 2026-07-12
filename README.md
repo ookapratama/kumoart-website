@@ -1,16 +1,17 @@
-# Kumoart - Website UMKM Kerajinan Rajut (CMS Edition) 🧶
+# Kumoart - Website UMKM Kerajinan Rajut 🧶
 
-Website promosi UMKM kerajinan tangan rajut menggunakan **Next.js** dengan integrasi **Decap CMS** untuk manajemen konten berbasis file Markdown.
+Website promosi UMKM kerajinan tangan rajut menggunakan **Next.js (App Router)** dengan **Supabase** sebagai database, storage gambar, dan autentikasi admin.
 
 ---
 
 ## 🚀 Fitur Utama
 
-- **⚡ Next.js App Router**: Cepat, modern, dan mendukung SSG (Static Site Generation).
-- **📦 Decap CMS**: Kelola produk dan event tanpa perlu database, cukup file Markdown.
-- **🌐 Dual Language**: Mendukung Bahasa Indonesia & Inggris (i18n).
-- **📱 Responsive Design**: Tampilan premium yang optimal di HP maupun Desktop.
-- **💬 Auto-WhatsApp**: Pesan produk atau tanya event langsung terhubung ke WhatsApp dengan teks otomatis.
+- **⚡ Next.js App Router**: ISR (Incremental Static Regeneration) — halaman publik statis, ter-refresh otomatis saat admin mengubah data.
+- **🗄️ Supabase**: PostgreSQL + Storage + Auth. Panel admin custom di `/admin`.
+- **🔐 Keamanan berlapis**: Semua mutasi lewat Server Actions dengan verifikasi admin, plus RLS allowlist di database.
+- **🌐 Dual Language**: Bahasa Indonesia & Inggris (i18n).
+- **📱 Responsive Design**: Optimal di HP maupun Desktop.
+- **💬 Auto-WhatsApp**: Pesan produk/event langsung terhubung ke WhatsApp.
 
 ---
 
@@ -18,74 +19,77 @@ Website promosi UMKM kerajinan tangan rajut menggunakan **Next.js** dengan integ
 
 ### 1. Persiapan Awal
 
-Pastikan Anda sudah menginstal **Node.js** dan mengikuti langkah berikut:
+Pastikan **Node.js** dan **pnpm** sudah terinstal:
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Setup environment variables
 cp .env.example .env.local
 ```
 
-_Edit `.env.local` dan isi nomor WhatsApp serta informasi brand Anda._
+Edit `.env.local` dan isi:
 
-### 2. Menjalankan Website (Mode Development)
+- `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` (dari dashboard Supabase)
+- Nomor WhatsApp serta informasi brand
+
+### 2. Setup Supabase (sekali saja)
+
+1. Buat project di [supabase.com](https://supabase.com).
+2. Jalankan `supabase/schema.sql` di **SQL Editor** (project baru), atau `supabase/migrations/000x_*.sql` berurutan (project lama).
+3. Buat user admin: **Dashboard → Authentication → Add user**.
+4. Masukkan user tersebut ke allowlist admin:
+   ```sql
+   INSERT INTO public.admins (user_id)
+   SELECT id FROM auth.users WHERE email = '<email admin>';
+   ```
+   ⚠️ **Wajib sebelum policy write aktif** — tanpa ini admin tidak bisa menulis data.
+5. Matikan pendaftaran publik: **Authentication → Sign In / Up → Allow new users to sign up = OFF**.
+
+### 3. Menjalankan Website (Mode Development)
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
-Website dapat diakses di `http://localhost:3000`.
-
-### 3. Menggunakan Admin CMS (Lokal)
-
-Untuk menambah atau mengubah produk/event di komputer Anda sendiri:
-
-1. **Jalankan Proxy Server** (di terminal baru):
-   ```bash
-   npx decap-server
-   ```
-2. **Buka Admin**: Akses `http://localhost:3000/admin/`.
-3. Klik tombol **Login** untuk masuk ke dashboard pengelolaan konten.
+- Website: `http://localhost:3000`
+- Panel Admin: `http://localhost:3000/admin` (login dengan user admin di atas)
 
 ---
 
-## 📝 Struktur Data (Markdown)
+## 🔐 Model Keamanan
 
-Kini data tidak lagi disimpan di JSON, melainkan di folder `content/`:
-
-- `content/products/` - File `.md` untuk setiap produk.
-- `content/events/` - File `.md` untuk setiap event.
-- `public/images/uploads/` - Lokasi penyimpanan gambar yang diupload via CMS.
-
----
-
-## 📁 Folder Penting
-
-- `/src/app` - Halaman dan routing website.
-- `/src/components` - Komponen UI (Navbar, Footer, Card, dll).
-- `/src/lib` - Logika bisnis (pembacaan file server-side, i18n, dll).
-- `/public/admin` - Konfigurasi Decap CMS.
+- **Baca publik**: hanya row `is_active = true` (dipaksa oleh RLS, bukan hanya filter aplikasi).
+- **Tulis**: hanya user yang terdaftar di tabel `public.admins` (fungsi `is_admin()`), diverifikasi dua lapis:
+  1. Server Action (`src/lib/actions/`) memanggil `requireAdmin()` sebelum mutasi.
+  2. RLS policy di database sebagai lapisan terakhir.
+- Upload gambar terjadi saat **Simpan** (bukan saat drag-drop), dan file lama otomatis dihapus saat diganti/di-delete — tidak ada file yatim di storage.
 
 ---
 
-## 🚢 Deployment (Vercel/Netlify)
+## 📁 Struktur Penting
 
-Project ini menggunakan **Static Export**. Setiap kali ada perubahan di CMS (saat sudah online), website perlu di-build ulang (otomatis oleh Vercel/Netlify saat ada push ke GitHub).
+- `/src/app/(public)` — halaman publik (ISR, revalidate 1 jam + on-demand saat admin menyimpan).
+- `/src/app/admin` — panel admin (dinamis, dilindungi proxy + layout + RLS).
+- `/src/lib/actions` — Server Actions (satu-satunya jalur tulis data).
+- `/src/lib/data/queries.ts` — factory query generik products/events.
+- `/src/lib/supabase` — client Supabase (typed) untuk browser/server/static.
+- `/supabase` — schema kanonik + migrasi SQL.
 
-### Langkah Deployment:
+---
 
-1. Push project ke repository GitHub Anda.
-2. Sambungkan ke Vercel atau Netlify.
-3. Gunakan command Build: `npm run build` dan folder Output: `out`.
-4. Tambahkan Environment Variables yang diperlukan di dashboard hosting.
+## 🚢 Deployment (Vercel)
+
+1. Push project ke GitHub.
+2. Sambungkan ke Vercel (build command default `next build` — **bukan** static export; proxy/auth butuh server).
+3. Tambahkan environment variables di dashboard Vercel.
 
 ---
 
 ## 🎨 Branding & Warna
 
-Tema utama menggunakan palet **Rose & Gray** untuk kesan premium dan feminin. Anda bisa mengubah konfigurasi brand di `src/lib/config.ts` atau langsung melalui `.env.local`.
+Tema utama menggunakan palet **Rose & Gray**. Konfigurasi brand di `src/lib/config.ts` atau via `.env.local`.
 
 ---
 

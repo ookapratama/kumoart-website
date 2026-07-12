@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { Product, formatPrice } from "@/lib/products";
 import WhatsAppButton from "@/components/CTA/WhatsAppButton";
+import ProductGallery from "@/components/Product/ProductGallery";
 import { useLanguage } from "@/lib/language";
 
 interface ProductDetailProps {
@@ -11,6 +11,12 @@ interface ProductDetailProps {
 
 export default function ProductDetail({ product }: ProductDetailProps) {
   const { t } = useLanguage();
+
+  const galleryImages = [
+    product.image_url,
+    ...(product.gallery_images ?? []),
+  ].filter((url): url is string => Boolean(url));
+  const images = galleryImages.length ? galleryImages : ["/images/placeholder.jpg"];
 
   const benefits = [
     t("features.handmade.title"),
@@ -23,26 +29,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100 mb-12">
       <div className="grid md:grid-cols-2 gap-0">
         {/* Product Image Section */}
-        <div className="relative aspect-square bg-gray-50 flex items-center justify-center p-6 md:p-10">
-          <div className="relative w-full h-full rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
-            <Image
-              src={product.image_url ?? "/images/placeholder.jpg"}
-              alt={product.name}
-              fill
-              className="object-cover"
-              priority
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          </div>
-          {/* Featured Badge */}
-          {product.is_featured && (
-            <div className="absolute top-12 left-12">
-              <span className="bg-rose-600 text-white text-[10px] font-black px-4 py-2 rounded-xl uppercase tracking-widest shadow-xl transform -rotate-3">
-                ✨ {t("products.featured")}
-              </span>
-            </div>
-          )}
-        </div>
+        <ProductGallery
+          images={images}
+          productName={product.name}
+          isFeatured={product.is_featured}
+        />
 
         {/* Product Content Section - Optimized for Conversion */}
         <div className="p-8 md:p-16 flex flex-col justify-center bg-white">
@@ -108,7 +99,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 productPrice={formatPrice(product.price)}
                 fullWidth
                 size="lg"
-                className="!py-5 !text-xl font-black shadow-2xl shadow-emerald-200/50 hover:scale-[1.02] transition-transform"
+                className="!py-5 !text-base md:!text-xl font-black shadow-2xl shadow-emerald-200/50 hover:scale-[1.02] transition-transform"
               />
               <div className="flex items-center justify-center gap-2 text-gray-400 text-sm font-bold">
                 <svg
@@ -133,7 +124,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
       {/* Sticky Mobile CTA (If price/name scrolled past) */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-lg border-t border-gray-100 z-40 md:hidden flex items-center justify-between gap-4 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
-        <div className="flex flex-col">
+        <div className="flex flex-col min-w-0">
           <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest">
             Harga
           </span>
@@ -144,7 +135,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         <WhatsAppButton
           productName={product.name}
           productPrice={formatPrice(product.price)}
-          className="!px-6 !py-3 !text-sm font-black whitespace-nowrap"
+          text="WhatsApp"
+          className="!px-6 !py-3 !text-sm font-black"
         />
       </div>
     </div>

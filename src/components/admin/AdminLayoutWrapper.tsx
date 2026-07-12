@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
+import AdminBottomNav from "@/components/admin/AdminBottomNav";
+
 import type { User } from "@supabase/supabase-js";
 
 interface AdminLayoutWrapperProps {
@@ -14,24 +17,25 @@ export default function AdminLayoutWrapper({
   children,
   user,
 }: AdminLayoutWrapperProps) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
+  const supabase = createClient();
 
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-  const closeSidebar = () => setIsSidebarOpen(false);
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/admin/login");
+    router.refresh();
+  };
 
   return (
-    <div className={`admin-layout ${isSidebarOpen ? "sidebar-open" : ""}`}>
-      {/* Overlay for mobile */}
-      {isSidebarOpen && (
-        <div className="sidebar-overlay" onClick={closeSidebar}></div>
-      )}
-
-      <AdminSidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
+    <div className="admin-layout">
+      <AdminSidebar />
 
       <div className="admin-main">
-        <AdminHeader user={user} onMenuToggle={toggleSidebar} />
+        <AdminHeader user={user} onLogout={handleLogout} />
         <main className="admin-content">{children}</main>
       </div>
+
+      <AdminBottomNav user={user} onLogout={handleLogout} />
     </div>
   );
 }

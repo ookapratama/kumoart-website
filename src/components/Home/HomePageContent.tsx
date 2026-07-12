@@ -9,7 +9,7 @@ import { Product } from "@/lib/products";
 import { Event } from "@/lib/events";
 import { config } from "@/lib/config";
 import { useLanguage } from "@/lib/language";
-import { useState, useEffect } from "react";
+import { useMounted } from "@/lib/use-mounted";
 
 interface HomePageContentProps {
   featuredProducts: Product[];
@@ -21,18 +21,14 @@ export default function HomePageContent({
   activeEvents,
 }: HomePageContentProps) {
   const { t } = useLanguage();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useMounted();
 
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: config.brand.fullName,
     url: config.site.url,
-    logo: `${config.site.url}/images/logo.png`,
+    logo: `${config.site.url}/logo.webp`,
     description: "Kerajinan rajut handmade berkualitas tinggi",
     contactPoint: {
       "@type": "ContactPoint",
@@ -126,13 +122,13 @@ export default function HomePageContent({
             >
               <div className="relative w-full h-[450px] bg-gradient-to-br from-rose-100 to-rose-200 rounded-[2rem] shadow-2xl flex items-center justify-center overflow-hidden border-8 border-white group">
                 <Image
-                  src="/images/hero_visual.png"
+                  src="/images/hero_visual.webp"
                   alt="Kumoart Craft Visual"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-8">
+                <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-start p-8">
                   <div className="text-white">
                     <span className="text-xs font-bold uppercase tracking-widest bg-rose-600 px-2 py-1 rounded mb-2 inline-block">
                       Handmade with Love
@@ -145,7 +141,7 @@ export default function HomePageContent({
               </div>
 
               {/* Floating Badge */}
-              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-3xl shadow-2xl border border-gray-100 hidden md:flex items-center gap-4 animate-bounce-slow">
+              <div className="absolute -bottom-6 -left-6 z-20 bg-white p-6 rounded-3xl shadow-2xl border border-gray-100 hidden md:flex items-center gap-4 animate-bounce-slow">
                 <span className="text-4xl">🧶</span>
                 <div>
                   <div className="text-sm font-black text-gray-900">

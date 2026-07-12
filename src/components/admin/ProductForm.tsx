@@ -1,10 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+
+import ImagePicker from "./shared/image-picker";
+import GalleryPicker from "./shared/gallery-picker";
+import { useEntityForm } from "./shared/use-entity-form";
+import { saveProduct } from "@/lib/actions/products";
+import { MAX_GALLERY_IMAGES } from "@/lib/products";
+
+import type { FormMode } from "./shared/use-entity-form";
 import type { Product } from "@/lib/products";
-import ImageUploader from "./ImageUploader";
 
 const CATEGORIES = [
   "Tas",
@@ -16,107 +21,66 @@ const CATEGORIES = [
 ];
 
 interface ProductFormProps {
-  mode: "create" | "edit";
+  mode: FormMode;
   product?: Product;
 }
 
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
-}
-
 export default function ProductForm({ mode, product }: ProductFormProps) {
-  const router = useRouter();
-  const supabase = createClient();
-
-  const [form, setForm] = useState({
-    name: product?.name ?? "",
-    slug: product?.slug ?? "",
-    description: product?.description ?? "",
-    price: product?.price?.toString() ?? "",
-    category: product?.category ?? "",
-    stock: product?.stock?.toString() ?? "0",
-    is_featured: product?.is_featured ?? false,
-    is_active: product?.is_active ?? true,
-    content: product?.content ?? "",
+  const {
+    form,
+    handleChange,
+    handleSlugSourceChange,
+    handleSlugChange,
+    imageFile,
+    setImageFile,
+    loading,
+    error,
+    submit,
+    cancel,
+  } = useEntityForm({
+    initial: {
+      name: product?.name ?? "",
+      slug: product?.slug ?? "",
+      description: product?.description ?? "",
+      price: product?.price?.toString() ?? "",
+      category: product?.category ?? "",
+      stock: product?.stock?.toString() ?? "0",
+      is_featured: product?.is_featured ?? false,
+      is_active: product?.is_active ?? true,
+      content: product?.content ?? "",
+    },
+    mode,
+    listPath: "/admin/produk",
+    action: saveProduct,
   });
 
-  const [imageUrl, setImageUrl] = useState<string>(product?.image_url ?? "");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [slugManual, setSlugManual] = useState(mode === "edit");
+  const [galleryKeepUrls, setGalleryKeepUrls] = useState<string[]>(
+    product?.gallery_images ?? [],
+  );
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.value;
-    setForm((prev) => ({
-      ...prev,
-      name,
-      ...(slugManual ? {} : { slug: generateSlug(name) }),
-    }));
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
 
-    if (!form.name || !form.slug || !form.price) {
-      setError("Nama, slug, dan harga wajib diisi.");
-      setLoading(false);
-      return;
+    const fd = new FormData();
+    fd.append("name", form.name);
+    fd.append("slug", form.slug);
+    fd.append("description", form.description);
+    fd.append("price", form.price);
+    fd.append("category", form.category);
+    fd.append("stock", form.stock);
+    fd.append("is_featured", String(form.is_featured));
+    fd.append("is_active", String(form.is_active));
+    fd.append("content", form.content);
+    galleryKeepUrls.forEach((url) => fd.append("galleryKeep", url));
+    galleryFiles.forEach((file) => fd.append("galleryFiles", file));
+
+    if (mode === "edit" && product) {
+      fd.append("id", product.id);
+      fd.append("existingImageUrl", product.image_url ?? "");
     }
 
-    const payload = {
-      name: form.name,
-      slug: form.slug,
-      description: form.description || null,
-      price: parseInt(form.price) || 0,
-      category: form.category || null,
-      stock: parseInt(form.stock) || 0,
-      is_featured: form.is_featured,
-      is_active: form.is_active,
-      content: form.content || null,
-      image_url: imageUrl || null,
-    };
-
-    let error;
-    if (mode === "create") {
-      ({ error } = await supabase.from("products").insert(payload));
-    } else {
-      ({ error } = await supabase
-        .from("products")
-        .update(payload)
-        .eq("id", product!.id));
-    }
-
-    if (error) {
-      if (error.code === "23505") {
-        setError("Slug sudah digunakan. Gunakan slug yang berbeda.");
-      } else {
-        setError(`Gagal menyimpan: ${error.message}`);
-      }
-      setLoading(false);
-      return;
-    }
-
-    router.push("/admin/produk");
-    router.refresh();
+    submit(fd);
   };
 
   return (
@@ -129,13 +93,32 @@ export default function ProductForm({ mode, product }: ProductFormProps) {
           {/* Gambar */}
           <div className="form-card">
             <h3 className="form-card-title">Gambar Produk</h3>
-            <ImageUploader
-              bucket="product-images"
+            <ImagePicker
               currentUrl={product?.image_url}
-              onUpload={setImageUrl}
-              label=""
+              onSelect={setImageFile}
             />
-            {imageUrl && <p className="form-hint">✅ Gambar terpilih</p>}
+            {(imageFile || product?.image_url) && (
+              <p className="form-hint">✅ Gambar terpilih</p>
+            )}
+          </div>
+
+          {/* Galeri */}
+          <div className="form-card">
+            <h3 className="form-card-title">Galeri Tambahan (Opsional)</h3>
+            <GalleryPicker
+              keepUrls={galleryKeepUrls}
+              onRemoveExisting={(url) =>
+                setGalleryKeepUrls((prev) => prev.filter((u) => u !== url))
+              }
+              newFiles={galleryFiles}
+              onAddFiles={(files) =>
+                setGalleryFiles((prev) => [...prev, ...files])
+              }
+              onRemoveNewFile={(index) =>
+                setGalleryFiles((prev) => prev.filter((_, i) => i !== index))
+              }
+              max={MAX_GALLERY_IMAGES}
+            />
           </div>
 
           {/* Status */}
@@ -188,7 +171,7 @@ export default function ProductForm({ mode, product }: ProductFormProps) {
                 type="text"
                 name="name"
                 value={form.name}
-                onChange={handleNameChange}
+                onChange={handleSlugSourceChange("name")}
                 placeholder="Contoh: Tas Rajut Macrame Premium"
                 className="form-input"
                 required
@@ -204,10 +187,7 @@ export default function ProductForm({ mode, product }: ProductFormProps) {
                   type="text"
                   name="slug"
                   value={form.slug}
-                  onChange={(e) => {
-                    setSlugManual(true);
-                    handleChange(e);
-                  }}
+                  onChange={handleSlugChange}
                   placeholder="tas-rajut-macrame-premium"
                   className="form-input prefix-input"
                   required
@@ -298,7 +278,7 @@ export default function ProductForm({ mode, product }: ProductFormProps) {
       <div className="form-actions">
         <button
           type="button"
-          onClick={() => router.push("/admin/produk")}
+          onClick={cancel}
           className="btn-secondary"
           disabled={loading}
         >

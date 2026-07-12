@@ -13,7 +13,7 @@ export default function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
-  const { language } = useLanguage();
+  const { t } = useLanguage();
 
   if (totalPages <= 1) return null;
 
@@ -26,7 +26,7 @@ export default function Pagination({
         disabled={currentPage === 1}
         className="px-4 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
       >
-        {language === "id" ? "Sebelumnnya" : "Previous"}
+        {t("pagination.previous")}
       </button>
 
       <div className="flex items-center space-x-1">
@@ -50,7 +50,7 @@ export default function Pagination({
         disabled={currentPage === totalPages}
         className="px-4 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
       >
-        {language === "id" ? "Selanjutnya" : "Next"}
+        {t("pagination.next")}
       </button>
     </div>
   );

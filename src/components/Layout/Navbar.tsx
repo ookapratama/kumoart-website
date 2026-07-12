@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
 import { config } from "@/lib/config";
 import LanguageSwitch from "@/components/UI/LanguageSwitch";
 import { useLanguage } from "@/lib/language";
@@ -13,7 +12,6 @@ interface NavbarProps {
 }
 
 export default function Navbar({ activeEvents = [] }: NavbarProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
 
   // Check if there are active events
@@ -33,11 +31,11 @@ export default function Navbar({ activeEvents = [] }: NavbarProps) {
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 group">
               <Image
-                src="/logo.png"
+                src="/logo.webp"
                 alt={`${config.brand.name} Logo`}
                 width={48}
                 height={48}
-                className="h-10 w-auto object-contain transition-transform group-hover:scale-105"
+                className="h-16 w-auto object-contain transition-transform group-hover:scale-105"
                 priority
               />
               <div className="flex flex-col">
@@ -84,69 +82,11 @@ export default function Navbar({ activeEvents = [] }: NavbarProps) {
             </div>
           </div>
 
-          {/* Mobile menu and Language Switch button */}
-          <div className="md:hidden flex items-center space-x-4">
+          {/* Language Switch (mobile) */}
+          <div className="md:hidden flex items-center">
             <LanguageSwitch className="scale-90" />
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-700 hover:text-rose-600 focus:outline-none relative"
-              aria-label="Toggle menu"
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {isMobileMenuOpen ? (
-                  <path d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-              {/* Mobile notification dot */}
-              {hasActiveEvents && !isMobileMenuOpen && (
-                <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
-                </span>
-              )}
-            </button>
           </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden pb-4">
-            <div className="flex flex-col space-y-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="flex items-center justify-between text-gray-700 hover:text-rose-600 hover:bg-rose-50 px-3 py-2 rounded-md transition-colors duration-200"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <span>{item.name}</span>
-                  {/* Mobile event badge */}
-                  {item.hasNotification && hasActiveEvents && (
-                    <span className="flex items-center gap-2">
-                      <span className="text-xs bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full font-medium">
-                        {activeEvents.length} {t("events.ongoing")}
-                      </span>
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-                      </span>
-                    </span>
-                  )}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Event announcement banner */}
@@ -159,7 +99,7 @@ export default function Navbar({ activeEvents = [] }: NavbarProps) {
               {Math.max(
                 ...activeEvents
                   .filter((e) => e.discount)
-                  .map((e) => e.discount || 0)
+                  .map((e) => e.discount || 0),
               )}
               %
             </span>
